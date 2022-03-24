@@ -1,16 +1,10 @@
-# This is a sample Python script.
+from spotify_api.spotify_api import SpotifyApi
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from spotify_api.spotify_auth import SpotifyAuth
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    auth = SpotifyAuth('user-read-private')
+    token = auth.get_access_token()
+    api_access = SpotifyApi()
+    print(api_access.get_user_profile(token))

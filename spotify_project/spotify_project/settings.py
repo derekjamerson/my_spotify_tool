@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import os
-from os.path import join, dirname
+from os.path import join, dirname, abspath
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -128,8 +128,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Spotify environment variables with dotenv
 
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+
+load_dotenv(find_dotenv())
 
 SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
