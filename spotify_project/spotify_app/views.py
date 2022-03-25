@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from spotify_api.spotify_auth import SpotifyAuth
 
-# Create your views here.
+
+def spotify_login_redirect(request):
+    return redirect(create_auth_url())
