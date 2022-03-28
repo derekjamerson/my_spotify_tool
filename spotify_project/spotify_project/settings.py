@@ -10,15 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
+
+print(os.environ.get('DJANGO_SECRET_KEY'))
+load_dotenv(find_dotenv())
+print(os.environ.get('DJANGO_SECRET_KEY'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from dotenv import load_dotenv, find_dotenv
-import os
-from os.path import join, dirname, abspath
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -30,7 +32,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'spotify_app'
+    'spotify_app',
 ]
 
 MIDDLEWARE = [
@@ -73,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'spotify_project.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -83,7 +83,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -103,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -114,7 +112,6 @@ TIME_ZONE = 'America/Indiana/Indianapolis'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -129,9 +126,38 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Spotify environment variables with dotenv
 
 
-load_dotenv(find_dotenv())
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
-SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
-REDIRECT_URI = os.environ.get('REDIRECT_URI')
-DJANGO_SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+# OAuth Settings
+OAUTH_URL_WHITELISTS = []
+
+OAUTH_CLIENT_NAME = 'spotify'
+
+OAUTH_CLIENT = {
+    'client_id': os.getenv('SPOTIFY_CLIENT_ID'),
+    'client_secret': os.getenv('SPOTIFY_CLIENT_SECRET'),
+    'access_token_url': 'https://accounts.spotify.com/api/token',
+    'authorize_url': 'https://accounts.spotify.com/authorize',
+    'api_base_url': 'https://spotify.com/api/v1',
+    'redirect_uri': os.getenv('REDIRECT_URI'),
+    'response_type': 'code',
+    'grant_type': 'authorization_code',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'client_kwargs': {
+        'scope': [
+            'user-read-private',
+            'user-read-email',
+            'user-library-modify',
+            'user-library-read',
+            'user-top-read',
+            'playlist-modify-private',
+            'playlist-read-collaborative',
+            'playlist-read-private',
+            'playlist-modify-public',
+        ],
+        'token_placement': 'header'
+    },
+    'userinfo_endpoint': 'user',
+}
+
+OAUTH_COOKIE_SESSION_ID = 'sso_session_id'
