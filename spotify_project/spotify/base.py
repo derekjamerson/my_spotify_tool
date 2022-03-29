@@ -52,7 +52,10 @@ class Spotify:
             self.created_rows['albums'] += 1
         defaults = {
             'name': track['name'],
-            'album': album_in_db
+            'duration_ms': track['duration_ms'],
+            'is_explicit': track['explicit'],
+            'popularity': track['popularity'],
+            'album': album_in_db,
         }
         track_in_db, created = Track.objects.update_or_create(pk=track['id'], defaults=defaults)
         track_in_db.artists.add(*artists_pks)
