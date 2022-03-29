@@ -19,9 +19,8 @@ def spotify_callback(request):
     return redirect(reverse('base:pull_data'))
 
 
-# need collision checking
 def pull_data(request):
     access_token = request.session['token_response']['access_token']
     spotify = Spotify(access_token)
-    track_count = spotify.pull_library_data()
-    return HttpResponse(f'db: {Track.objects.count()}, request: {track_count}')
+    created_track_count = spotify.pull_library_data()
+    return HttpResponse(f'db: {Track.objects.count()}, created: {created_track_count}')
