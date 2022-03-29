@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 
+from albums.models import Album
 from artists.models import Artist
 from spotify import Spotify
 from spotify.oauth import OAuth
@@ -24,4 +25,9 @@ def pull_data(request):
     access_token = request.session['token_response']['access_token']
     spotify = Spotify(access_token)
     created_rows = spotify.pull_library_data()
-    return HttpResponse(f'tracks: {Track.objects.count()} artists: {Artist.objects.count()} created: {created_rows}')
+    return HttpResponse(
+        f'tracks: {Track.objects.count()}, '
+        f'artists: {Artist.objects.count()}, '
+        f'albums: {Album.objects.count()} | ' 
+        f'created: {created_rows}'
+    )
