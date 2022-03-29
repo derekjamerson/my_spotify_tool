@@ -20,7 +20,6 @@ def spotify_callback(request):
 
 
 # need collision checking
-# can return count of objects for verify
 def pull_data(request):
     access_token = request.session['token_response']['access_token']
     spotify = Spotify(access_token)
