@@ -34,6 +34,10 @@ class Spotify:
     def pull_library_data(self):
         counter = 0
         for track in self.tracks:
-            Track.objects.create(pk=track['id'], name=track['name'])
-            counter += 1
+            defaults = {
+                'name': track['name'],
+            }
+            track_in_db, created = Track.objects.update_or_create(pk=track['id'], defaults=defaults)
+            if created:
+                counter += 1
         return counter
