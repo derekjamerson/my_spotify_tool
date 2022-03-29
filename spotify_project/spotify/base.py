@@ -1,4 +1,8 @@
+from urllib.parse import urlencode
+
 import requests
+
+from tracks.models import Track
 
 
 class Spotify:
@@ -6,8 +10,11 @@ class Spotify:
         self.token = token
 
     @staticmethod
-    def get_response_json(url, headers):
-        return requests.get(url, headers=headers, data={'limit': '50'}).json()
+    def get_response_json(url, headers, limit='50'):
+        body = {
+            'limit': limit,
+        }
+        return requests.get(url, headers=headers, params=urlencode(body)).json()
 
     @property
     def tracks(self):
@@ -23,3 +30,10 @@ class Spotify:
             if response['next'] is None:
                 break
             response = self.get_response_json(response['next'], headers)
+
+    def pull_library_data(self):
+        counter = 0
+        for track in self.tracks:
+            Track.objects.create(pk=track['id'], name=track['name'])
+            counter += 1
+        return counter

@@ -14,9 +14,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 
-print(os.environ.get('DJANGO_SECRET_KEY'))
 load_dotenv(find_dotenv())
-print(os.environ.get('DJANGO_SECRET_KEY'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -41,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'spotify_app',
+    'base',
+    'tracks',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
