@@ -1,5 +1,3 @@
-from albums.models import Album
-from artists.models import Artist
 from django.db import models
 
 

@@ -126,41 +126,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Spotify environment variables with dotenv
-
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-
-# OAuth Settings
-OAUTH_URL_WHITELISTS = []
-
-OAUTH_CLIENT_NAME = 'spotify'
-
-OAUTH_CLIENT = {
-    'client_id': os.getenv('SPOTIFY_CLIENT_ID'),
-    'client_secret': os.getenv('SPOTIFY_CLIENT_SECRET'),
-    'access_token_url': 'https://accounts.spotify.com/api/token',
-    'authorize_url': 'https://accounts.spotify.com/authorize',
-    'api_base_url': 'https://spotify.com/api/v1',
-    'redirect_uri': os.getenv('REDIRECT_URI'),
-    'response_type': 'code',
-    'grant_type': 'authorization_code',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'client_kwargs': {
-        'scope': [
-            'user-read-private',
-            'user-read-email',
-            'user-library-modify',
-            'user-library-read',
-            'user-top-read',
-            'playlist-modify-private',
-            'playlist-read-collaborative',
-            'playlist-read-private',
-            'playlist-modify-public',
-        ],
-        'token_placement': 'header',
-    },
-    'userinfo_endpoint': 'user',
-}
-
-OAUTH_COOKIE_SESSION_ID = 'sso_session_id'
