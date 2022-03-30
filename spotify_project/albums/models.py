@@ -1,6 +1,5 @@
-from django.db import models
-
 from artists.models import Artist
+from django.db import models
 
 
 class Album(models.Model):

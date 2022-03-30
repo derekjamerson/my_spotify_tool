@@ -1,7 +1,6 @@
 from urllib.parse import urlencode
 
 import requests
-
 from albums.models import Album
 from artists.models import Artist
 from tracks.models import Track
@@ -57,7 +56,9 @@ class Spotify:
             'popularity': track['popularity'],
             'album': album_in_db,
         }
-        track_in_db, created = Track.objects.update_or_create(pk=track['id'], defaults=defaults)
+        track_in_db, created = Track.objects.update_or_create(
+            pk=track['id'], defaults=defaults
+        )
         track_in_db.artists.add(*artists_pks)
         return created
 
@@ -75,7 +76,9 @@ class Spotify:
         defaults = {
             'name': artist['name'],
         }
-        artist_in_db, created = Artist.objects.update_or_create(pk=artist['id'], defaults=defaults)
+        artist_in_db, created = Artist.objects.update_or_create(
+            pk=artist['id'], defaults=defaults
+        )
         return created
 
     def add_album_to_db(self, album):
@@ -83,6 +86,8 @@ class Spotify:
         defaults = {
             'name': album['name'],
         }
-        album_in_db, created = Album.objects.update_or_create(pk=album['id'], defaults=defaults)
+        album_in_db, created = Album.objects.update_or_create(
+            pk=album['id'], defaults=defaults
+        )
         album_in_db.artists.add(*artists_pks)
         return album_in_db, created
