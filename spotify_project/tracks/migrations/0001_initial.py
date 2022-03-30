@@ -7,15 +7,17 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Track',
             fields=[
                 ('name', models.CharField(max_length=200)),
-                ('spotify_id', models.CharField(max_length=22, primary_key=True, serialize=False)),
+                (
+                    'spotify_id',
+                    models.CharField(max_length=22, primary_key=True, serialize=False),
+                ),
             ],
         ),
     ]

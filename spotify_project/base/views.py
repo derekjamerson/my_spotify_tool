@@ -1,9 +1,8 @@
+from albums.models import Album
+from artists.models import Artist
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-
-from albums.models import Album
-from artists.models import Artist
 from spotify import Spotify
 from spotify.oauth import OAuth
 from tracks.models import Track
@@ -28,6 +27,6 @@ def pull_data(request):
     return HttpResponse(
         f'tracks: {Track.objects.count()}, '
         f'artists: {Artist.objects.count()}, '
-        f'albums: {Album.objects.count()} | ' 
+        f'albums: {Album.objects.count()} | '
         f'created: {created_rows}'
     )

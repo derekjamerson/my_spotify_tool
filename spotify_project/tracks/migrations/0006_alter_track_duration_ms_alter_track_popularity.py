@@ -6,7 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tracks', '0005_track_duration_ms_track_is_explicit_track_popularity_and_more'),
+        (
+            'tracks',
+            '0005_track_duration_ms_track_is_explicit_track_popularity_and_more',
+        ),
     ]
 
     operations = [

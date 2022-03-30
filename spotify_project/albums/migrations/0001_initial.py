@@ -15,9 +15,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Album',
             fields=[
-                ('spotify_id', models.CharField(max_length=22, primary_key=True, serialize=False)),
+                (
+                    'spotify_id',
+                    models.CharField(max_length=22, primary_key=True, serialize=False),
+                ),
                 ('name', models.CharField(max_length=200)),
-                ('artists', models.ManyToManyField(related_name='albums', to='artists.artist')),
+                (
+                    'artists',
+                    models.ManyToManyField(related_name='albums', to='artists.artist'),
+                ),
             ],
         ),
     ]

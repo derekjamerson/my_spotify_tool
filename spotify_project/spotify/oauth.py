@@ -27,7 +27,9 @@ class OAuth:
         return auth_url
 
     def get_token_json(self, auth_response):
-        auth_string = os.getenv('SPOTIFY_CLIENT_ID') + ':' + os.getenv('SPOTIFY_CLIENT_SECRET')
+        auth_string = (
+            os.getenv('SPOTIFY_CLIENT_ID') + ':' + os.getenv('SPOTIFY_CLIENT_SECRET')
+        )
         auth_head = base64.b64encode(auth_string.encode('ascii')).decode('ascii')
         headers = {
             'Authorization': 'Basic ' + auth_head,
@@ -38,5 +40,7 @@ class OAuth:
             'redirect_uri': os.getenv('REDIRECT_URI'),
             'grant_type': 'authorization_code',
         }
-        response_json = requests.post(self.token_uri, data=urlencode(body), headers=headers, json=True).json()
+        response_json = requests.post(
+            self.token_uri, data=urlencode(body), headers=headers, json=True
+        ).json()
         return response_json
