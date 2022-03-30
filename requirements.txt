@@ -1,7 +1,6 @@
 app==0.0.1
 asgiref==3.5.0
 Authlib==1.0.0
-backports.zoneinfo==0.2.1
 certifi==2021.10.8
 cffi==1.15.0
 cfgv==3.3.1
