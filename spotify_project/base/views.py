@@ -40,3 +40,8 @@ def pull_data(request):
 def all_artists(request):
     artists = Artist.objects.all().order_by(Lower('name'))
     return render(request, 'all_artists.html', {'context': artists})
+
+
+def single_artist(request, artist_id, name):
+    tracks = Track.objects.filter(artists=artist_id).order_by(Lower('name'))
+    return render(request, 'single_artist.html', {'name': name, 'tracks': tracks})

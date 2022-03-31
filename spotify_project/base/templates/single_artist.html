@@ -8,10 +8,9 @@
 </head>
 <body>
     <div class="text-center">
-        <h1>All Artists in Database</h1>
+        <h1>{{ name }}</h1>
     </div>
-    <div class="container">
-        <table class="table table-hover table-sm">
+    <table class="table table-hover table-sm">
             <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -19,14 +18,13 @@
                 </tr>
             </thead>
             <tbody>
-            {% for artist in context %}
-                <tr style='cursor: pointer; cursor: hand;' onclick="window.location='{% url 'base:single_artist' artist_id=artist.spotify_id name=artist.name %}';"</tr>
+            {% for track in tracks %}
+                <tr>
                   <th scope="row">{{ forloop.counter }}</th>
-                  <td>{{ artist.name }}</td>
+                  <td>{{ track.name }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-    </div>
 </body>
 </html>
