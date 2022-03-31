@@ -1,7 +1,11 @@
+import time
+
+from django.db.models.functions import Lower
+
 from albums.models import Album
 from artists.models import Artist
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from spotify import Spotify
 from spotify.oauth import OAuth
@@ -21,12 +25,18 @@ def spotify_callback(request):
 
 
 def pull_data(request):
+    start_time = time.time()
     access_token = request.session['token_response']['access_token']
     spotify = Spotify(access_token)
-    created_rows = spotify.pull_library_data()
+    spotify.pull_library_data()
     return HttpResponse(
+        f'time: {time.time() - start_time} | '
         f'tracks: {Track.objects.count()}, '
         f'artists: {Artist.objects.count()}, '
         f'albums: {Album.objects.count()} | '
-        f'created: {created_rows}'
     )
+
+
+def all_artists(request):
+    artists = Artist.objects.all().order_by(Lower('name'))
+    return render(request, 'all_artists.html', {'context': artists})

@@ -9,11 +9,6 @@ from tracks.models import Track
 class Spotify:
     def __init__(self, token):
         self.token = token
-        self.created_rows = {
-            'tracks': 0,
-            'artists': 0,
-            'albums': 0,
-        }
 
     @staticmethod
     def get_response_json(url, headers, limit='50'):
@@ -39,16 +34,12 @@ class Spotify:
 
     def pull_library_data(self):
         for track in self.tracks:
-            created = self.add_track_to_db(track)
-            if created:
-                self.created_rows['tracks'] += 1
-        return self.created_rows
+            self.add_track_to_db(track)
+        return
 
     def add_track_to_db(self, track):
         artists_pks = self.add_array_of_artists(track['artists'])
-        album_in_db, created_album = self.add_album_to_db(track['album'])
-        if created_album:
-            self.created_rows['albums'] += 1
+        album_in_db = self.add_album_to_db(track['album'])
         defaults = {
             'name': track['name'],
             'duration_ms': track['duration_ms'],
@@ -66,9 +57,7 @@ class Spotify:
         artists_pks = []
         for artist in artists:
             artists_pks.append(artist['id'])
-            created = self.add_artist_to_db(artist)
-            if created:
-                self.created_rows['artists'] += 1
+            self.add_artist_to_db(artist)
         return artists_pks
 
     @staticmethod
@@ -76,10 +65,10 @@ class Spotify:
         defaults = {
             'name': artist['name'],
         }
-        artist_in_db, created = Artist.objects.update_or_create(
+        Artist.objects.update_or_create(
             pk=artist['id'], defaults=defaults
         )
-        return created
+        return
 
     def add_album_to_db(self, album):
         artists_pks = self.add_array_of_artists(album['artists'])
@@ -90,4 +79,4 @@ class Spotify:
             pk=album['id'], defaults=defaults
         )
         album_in_db.artists.add(*artists_pks)
-        return album_in_db, created
+        return album_in_db
