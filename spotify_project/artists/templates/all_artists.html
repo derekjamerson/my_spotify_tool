@@ -14,7 +14,7 @@
             </thead>
             <tbody>
             {% for artist in context %}
-                <tr style='cursor: pointer; cursor: hand;' onclick="window.location='{% url 'base:single_artist' artist.spotify_id %}';"</tr>
+                <tr style='cursor: pointer; cursor: hand;' onclick="window.location='{% url 'artists:single_artist' artist.spotify_id %}';"</tr>
                   <th scope="row">{{ forloop.counter }}</th>
                   <td>{{ artist.name }}</td>
                 </tr>
