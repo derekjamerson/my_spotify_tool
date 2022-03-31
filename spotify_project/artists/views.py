@@ -6,7 +6,7 @@ from artists.models import Artist
 
 def all_artists(request):
     artists = Artist.objects.all().order_by(Lower('name'))
-    return render(request, 'all_artists.html', {'context': artists})
+    return render(request, 'all_artists.html', {'artists': artists})
 
 
 def single_artist(request, artist_id):
