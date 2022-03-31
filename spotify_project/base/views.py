@@ -1,9 +1,11 @@
 import time
 
+from django.db.models.functions import Lower
+
 from albums.models import Album
 from artists.models import Artist
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from spotify import Spotify
 from spotify.oauth import OAuth
@@ -33,3 +35,8 @@ def pull_data(request):
         f'artists: {Artist.objects.count()}, '
         f'albums: {Album.objects.count()} | '
     )
+
+
+def all_artists(request):
+    artists = Artist.objects.all().order_by(Lower('name'))
+    return render(request, 'all_artists.html', {'context': artists})

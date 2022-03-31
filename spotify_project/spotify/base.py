@@ -39,7 +39,7 @@ class Spotify:
 
     def add_track_to_db(self, track):
         artists_pks = self.add_array_of_artists(track['artists'])
-        album_in_db, created_album = self.add_album_to_db(track['album'])
+        album_in_db = self.add_album_to_db(track['album'])
         defaults = {
             'name': track['name'],
             'duration_ms': track['duration_ms'],
