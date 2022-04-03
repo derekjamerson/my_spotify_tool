@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+    <div class="text-center">
+        <h1>Welcome</h1>
+    </div>
+    <div class="row justify-content-center" style="padding-top: 65px">
+        <div class="list-group col-2 text-center">
+        {% if user.is_authenticated %}
+            <a href="#" class="list-group-item list-group-item-action">Logout</a>
+            <a href="{% url 'artists:all_artists' %}" class="list-group-item list-group-item-action">View Artists</a>
+        {% else %}
+            <a href="#" class="list-group-item list-group-item-action">Login</a>
+        {% endif %}
+        </div>
+    </div>
+{% endblock content %}
