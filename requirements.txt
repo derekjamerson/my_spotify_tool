@@ -13,6 +13,7 @@ distlib==0.3.4
 Django==4.0.3
 django-extensions==3.1.5
 docopt==0.6.2
+factory_boy==3.2.1
 filelock==3.6.0
 identify==2.4.12
 idna==3.3
