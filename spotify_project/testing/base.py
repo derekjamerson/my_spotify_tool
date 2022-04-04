@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 class BaseTestCase(TestCase):
     @staticmethod
-    def css_select_get_test(response, css_selector):
+    def css_select_get_text(response, css_selector):
         soup = BeautifulSoup(response.content, features='html.parser')
         names = []
         for element in soup.select(css_selector):

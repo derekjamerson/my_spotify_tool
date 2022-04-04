@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from django.urls import reverse
 
 from artists.factories import ArtistFactory
@@ -19,7 +21,7 @@ class AllArtistsTestCase(BaseTestCase):
 
     def test_artist_name_sorted(self):
         r = self.client.get(self.url)
-        actual_names = self.css_select_get_test(r, 'td.artist-name')
+        actual_names = self.css_select_get_text(r, 'td.artist-name')
         expected_names = list(Artist.objects.values_list('name', flat=True).order_by('name'))
         self.assertEqual(actual_names, expected_names)
 
@@ -34,16 +36,28 @@ class AllArtistsTestCase(BaseTestCase):
 
 
 class SingleArtistTestCase(BaseTestCase):
-    url_string = 'artists:single_artist'
+    @property
+    def url(self):
+        return reverse('artists:single_artist',
+                       kwargs={'artist_id': self.artist.spotify_id},
+                       )
 
     def setUp(self):
         super().setUp()
+        self.artist = ArtistFactory()
         self.tracks = TrackFactory.create_batch(3)
+        for track in self.tracks:
+            track.artists.add(self.artist)
+        # not included
+        TrackFactory()
 
     def test_GET_returns_200(self):
-        track = self.tracks[0]
-        print(track.artists)
-        artist = track.artists[0]
-        url_params = {'artist_id': artist.spotify_id}
-        r = self.client.get(reverse(self.url_string), url_params)
+        r = self.client.get(self.url)
         self.assertEqual(r.status_code, 200)
+
+    def test_track_names_present(self):
+        r = self.client.get(self.url)
+        actual_names = self.css_select_get_text(r, 'td.track-name')
+        self.tracks.sort(key=attrgetter('name'))
+        expected_names = [track.name for track in self.tracks]
+        self.assertEqual(actual_names, expected_names)
