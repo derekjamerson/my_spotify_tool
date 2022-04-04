@@ -38,6 +38,7 @@ class Spotify:
         return
 
     def add_track_to_db(self, track):
+        print(track)
         artists_pks = self.add_array_of_artists(track['artists'])
         album_in_db = self.add_album_to_db(track['album'])
         defaults = {
