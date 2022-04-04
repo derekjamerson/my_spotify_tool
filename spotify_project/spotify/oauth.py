@@ -11,9 +11,9 @@ class OAuth:
     auth_endpoint = 'https://accounts.spotify.com/authorize'
     token_uri = 'https://accounts.spotify.com/api/token'
     scope = [
-        'user-read-private',
-        'user-read-email',
-        'user-library-read',
+        'users-read-private',
+        'users-read-email',
+        'users-library-read',
     ]
 
     def create_auth_url(self):

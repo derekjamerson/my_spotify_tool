@@ -3,12 +3,17 @@ from urllib.parse import urlencode
 import requests
 from albums.models import Album
 from artists.models import Artist
+from users.models import CustomUser
 from tracks.models import Track
 
 
 class Spotify:
     def __init__(self, token):
         self.token = token
+        self.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.token}',
+        }
 
     @staticmethod
     def get_response_json(url, headers, limit='50'):
@@ -19,18 +24,24 @@ class Spotify:
 
     @property
     def tracks(self):
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.token}',
-        }
         library_url = 'https://api.spotify.com/v1/me/tracks'
-        response = self.get_response_json(library_url, headers)
+        response = self.get_response_json(library_url, self.headers)
         while True:
             for track in response['items']:
                 yield track['track']
             if response['next'] is None:
                 break
-            response = self.get_response_json(response['next'], headers)
+            response = self.get_response_json(response['next'], self.headers)
+
+    def fetch_current_user(self):
+        profile_url = 'https://api.spotify.com/v1/me'
+        response = self.get_response_json(profile_url, self.headers)
+        defaults = {
+            'username': response['display_name'] or response['email'],
+            'email': response['email'],
+        }
+        current_user, created = CustomUser.objects.update_or_create(pk=response['id'], defaults=defaults)
+        return current_user
 
     def pull_library_data(self):
         for track in self.tracks:

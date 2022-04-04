@@ -1,13 +1,11 @@
 import time
 
-from albums.models import Album
-from artists.models import Artist
-from django.http import HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render
 from django.urls import reverse
+
 from spotify import Spotify
 from spotify.oauth import OAuth
-from tracks.models import Track
 
 
 def index(request):
@@ -23,7 +21,19 @@ def spotify_login(request):
 def spotify_callback(request):
     oauth = OAuth()
     request.session['token_response'] = oauth.get_token_json(request)
+    access_token = request.session['token_response']['access_token']
+    spotify = Spotify(access_token)
+    current_user = spotify.fetch_current_user()
+    user = authenticate(request, pk=current_user.pk)
+    if user is not None:
+        login(request, user)
+    print(request.user)
     return redirect(reverse('base:pull_data'))
+
+
+def logout(request):
+    logout(request)
+    return redirect(reverse('base:index'))
 
 
 def pull_data(request):
@@ -31,12 +41,5 @@ def pull_data(request):
     access_token = request.session['token_response']['access_token']
     spotify = Spotify(access_token)
     spotify.pull_library_data()
-    return HttpResponse(
-        f'time: {time.time() - start_time} | '
-        f'tracks: {Track.objects.count()}, '
-        f'artists: {Artist.objects.count()}, '
-        f'albums: {Album.objects.count()} | '
-    )
-
-
-
+    print(f'time: {time.time() - start_time}')
+    return redirect(reverse('base:index'))
