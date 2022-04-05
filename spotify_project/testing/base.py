@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 from django.test import TestCase
 
 from bs4 import BeautifulSoup
@@ -22,3 +24,16 @@ class BaseTestCase(TestCase):
                 attr_dict[attribute] = element.attrs.get(attribute, None)
             result.append(attr_dict)
         return result
+
+    @contextmanager
+    def assert_num_objects_created(self, counts):
+        before_counts = {}
+        after_counts = {}
+        for Model in counts:
+            before_counts[Model] = Model.objects.count()
+        yield
+        for Model in counts:
+            after_counts[Model] = Model.objects.count()
+        for Model in counts:
+            delta = after_counts[Model] - before_counts[Model]
+            self.assertEqual(delta, counts[Model], Model)
