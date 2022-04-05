@@ -1,6 +1,7 @@
 import time
 
 from django.contrib.auth import login, logout
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
@@ -41,4 +42,4 @@ def pull_data(request):
     spotify = Spotify(access_token)
     spotify.pull_library_data()
     print(f'time: {time.time() - start_time}')
-    return redirect(reverse('base:index'))
+    return HttpResponse()
