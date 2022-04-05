@@ -1,4 +1,4 @@
-from django.urls import re_path, path
+from django.urls import re_path
 
 from . import views
 
@@ -9,5 +9,5 @@ urlpatterns = [
     re_path(r'^spotify_login/$', views.spotify_login, name='login'),
     re_path(r'^callback/$', views.spotify_callback, name='callback'),
     re_path(r'^pull_data/$', views.pull_data, name='pull_data'),
-    re_path(r'^logout/$', views.logout, name='logout'),
+    re_path(r'^logout/$', views.logout_view, name='logout'),
 ]

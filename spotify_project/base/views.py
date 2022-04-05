@@ -1,12 +1,11 @@
 import time
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login, logout
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from spotify import Spotify
 from spotify.oauth import OAuth
-from spotify_project import settings
 
 
 def index(request):
@@ -28,11 +27,10 @@ def spotify_callback(request):
     user.backend = 'django.contrib.auth.backends.ModelBackend'
     if user is not None:
         login(request, user)
-    print(request.user)
     return redirect(reverse('base:pull_data'))
 
 
-def logout(request):
+def logout_view(request):
     logout(request)
     return redirect(reverse('base:index'))
 
