@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from spotify import Spotify
 from spotify.oauth import OAuth
+from spotify_project import settings
 
 
 def index(request):
@@ -23,8 +24,8 @@ def spotify_callback(request):
     request.session['token_response'] = oauth.get_token_json(request)
     access_token = request.session['token_response']['access_token']
     spotify = Spotify(access_token)
-    current_user = spotify.fetch_current_user()
-    user = authenticate(request, pk=current_user.pk)
+    user = spotify.fetch_current_user()
+    user.backend = 'django.contrib.auth.backends.ModelBackend'
     if user is not None:
         login(request, user)
     print(request.user)
