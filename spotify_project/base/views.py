@@ -29,7 +29,6 @@ def spotify_callback(request):
 def pull_data(request):
     start_time = time.time()
     access_token = request.session['token_response']['access_token']
-    print(access_token)
     spotify = Spotify(access_token)
     spotify.pull_library_data()
     return HttpResponse(

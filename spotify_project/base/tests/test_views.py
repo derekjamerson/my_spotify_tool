@@ -16,8 +16,15 @@ class PullDataTestCase(BaseTestCase):
 
     def get_artists(self, num_artists=1):
         return [
-            {'id': '', 'name': ''} for _ in range(num_artists)
+             self.get_artist() for _ in range(num_artists)
         ]
+
+    @staticmethod
+    def get_artist():
+        return {
+            'id': '',
+            'name': '',
+        }
 
     def get_album(self, num_artists=1):
         return {
@@ -39,7 +46,7 @@ class PullDataTestCase(BaseTestCase):
 
     def pull_data(self):
         session = self.client.session
-        session['token_response'] = {'access_token': 'access_token'}
+        session['token_response'] = {'access_token': 'dummy_access_token'}
         session.save()
         return_value = {
             'items': self.get_items(),
