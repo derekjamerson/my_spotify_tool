@@ -2,7 +2,6 @@ import random
 import uuid
 
 import factory
-
 from albums.models import Album
 from artists.factories import ArtistFactory
 from tracks.models import Track

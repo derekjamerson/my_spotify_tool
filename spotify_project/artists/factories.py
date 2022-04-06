@@ -1,7 +1,6 @@
 import uuid
 
 import factory
-
 from artists.models import Artist
 
 

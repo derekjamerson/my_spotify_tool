@@ -3,12 +3,17 @@ from urllib.parse import urlencode
 import requests
 from albums.models import Album
 from artists.models import Artist
+from django.contrib.auth import get_user_model
 from tracks.models import Track
 
 
 class Spotify:
     def __init__(self, token):
         self.token = token
+        self.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.token}',
+        }
 
     @staticmethod
     def get_response_json(url, headers, limit='50'):
@@ -19,18 +24,19 @@ class Spotify:
 
     @property
     def tracks(self):
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.token}',
-        }
         library_url = 'https://api.spotify.com/v1/me/tracks'
-        response = self.get_response_json(library_url, headers)
+        response = self.get_response_json(library_url, self.headers)
         while True:
             for track in response['items']:
                 yield track['track']
             if response['next'] is None:
                 break
-            response = self.get_response_json(response['next'], headers)
+            response = self.get_response_json(response['next'], self.headers)
+
+    def fetch_current_user(self):
+        profile_url = 'https://api.spotify.com/v1/me'
+        spotify_user = self.get_response_json(profile_url, self.headers)
+        return spotify_user
 
     def pull_library_data(self):
         for track in self.tracks:
@@ -65,9 +71,7 @@ class Spotify:
         defaults = {
             'name': artist['name'],
         }
-        Artist.objects.update_or_create(
-            pk=artist['id'], defaults=defaults
-        )
+        Artist.objects.update_or_create(pk=artist['id'], defaults=defaults)
         return
 
     def add_album_to_db(self, album):
