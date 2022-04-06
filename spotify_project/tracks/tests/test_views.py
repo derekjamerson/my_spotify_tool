@@ -7,24 +7,29 @@ from testing import BaseTestCase
 from tracks.factories import TrackFactory
 
 
-class AllArtistsTestCase(BaseTestCase):
-    url = reverse('artists:all_artists')
+class TrackInfoTestCase(BaseTestCase):
+    @property
+    def url(self):
+        return reverse(
+            'tracks:track_info',
+            kwargs={'track_id': self.track.spotify_id},
+        )
 
     def setUp(self):
         super().setUp()
-        ArtistFactory.create_batch(3)
+        self.track = TrackFactory()
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)
         self.assertEqual(r.status_code, 200)
 
-    def test_artist_name_sorted(self):
+    def test_properties_present(self):
         r = self.client.get(self.url)
-        actual_names = self.css_select_get_text(r, 'td.artist-name')
-        expected_names = list(
-            Artist.objects.values_list('name', flat=True).order_by('name')
+        actual_properties = self.css_select_get_text(r, 'dl.properties dd')
+        expected_properties = list(
+            self.objects.values_list('name', flat=True).order_by('name')
         )
-        self.assertEqual(actual_names, expected_names)
+        self.assertEqual(actual_properties, expected_properties)
 
     def test_link_to_drill_down(self):
         r = self.client.get(self.url)
