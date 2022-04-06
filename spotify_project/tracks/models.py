@@ -13,5 +13,15 @@ class Track(models.Model):
     is_explicit = models.BooleanField(default=False)
     popularity = models.CharField(max_length=3)
 
+    @property
+    def duration(self):
+        seconds = (int(self.duration_ms) / 1000) % 60
+        minutes = (int(self.duration_ms) / (1000 * 60)) % 60
+        return f'{int(minutes)}:{round(seconds)}'
+
+    @duration.setter
+    def duration(self, value):
+        self.duration_ms = value
+
     def __str__(self):
         return self.name
