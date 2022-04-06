@@ -15,3 +15,9 @@ class AuthBackend(BaseBackend):
             pk=spot_user['id'], defaults=defaults
         )
         return user
+
+    def get_user(self, spotify_id):
+        try:
+            return get_user_model().objects.get(pk=spotify_id)
+        except get_user_model().DoesNotExist:
+            return None
