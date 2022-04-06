@@ -16,7 +16,11 @@
             {% for track in tracks %}
                 <tr>
                   <th scope="row">{{ forloop.counter }}</th>
-                  <td class="track-name">{{ track.name }}</td>
+                  <td class="track-name">
+                      <a href="{% url 'tracks:track_info' track.spotify_id %}">
+                        {{ track.name }}
+                      </a>
+                  </td>
                 </tr>
             {% endfor %}
             </tbody>
