@@ -10,7 +10,7 @@ from spotify.oauth import OAuth
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {})
 
 
 def spotify_login(request):
@@ -26,7 +26,7 @@ def spotify_callback(request):
     user = authenticate(access_token=access_token)
     if user is not None:
         login(request, user)
-    return redirect(reverse('base:pull_data'))
+    return index(request)
 
 
 def logout_view(request):
