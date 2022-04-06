@@ -1,7 +1,6 @@
-from django.db.models.functions import Lower
-from django.shortcuts import render, get_object_or_404
-
 from artists.models import Artist
+from django.db.models.functions import Lower
+from django.shortcuts import get_object_or_404, render
 
 
 def all_artists(request):
@@ -12,4 +11,6 @@ def all_artists(request):
 def single_artist(request, artist_id):
     artist = get_object_or_404(Artist, spotify_id=artist_id)
     tracks = artist.tracks.order_by(Lower('name'))
-    return render(request, 'single_artist.html', {'name': artist.name, 'tracks': tracks})
+    return render(
+        request, 'single_artist.html', {'name': artist.name, 'tracks': tracks}
+    )

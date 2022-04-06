@@ -1,11 +1,10 @@
 import time
 
-from django.contrib.auth import login, logout, authenticate
+from backends.base import AuthBackend
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-
-from backends.base import AuthBackend
 from spotify import Spotify
 from spotify.oauth import OAuth
 

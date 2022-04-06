@@ -1,10 +1,9 @@
 from urllib.parse import urlencode
 
 import requests
-from django.contrib.auth import get_user_model
-
 from albums.models import Album
 from artists.models import Artist
+from django.contrib.auth import get_user_model
 from tracks.models import Track
 
 
@@ -72,9 +71,7 @@ class Spotify:
         defaults = {
             'name': artist['name'],
         }
-        Artist.objects.update_or_create(
-            pk=artist['id'], defaults=defaults
-        )
+        Artist.objects.update_or_create(pk=artist['id'], defaults=defaults)
         return
 
     def add_album_to_db(self, album):

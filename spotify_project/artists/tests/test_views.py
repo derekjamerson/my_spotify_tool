@@ -1,9 +1,8 @@
 from operator import attrgetter
 
-from django.urls import reverse
-
 from artists.factories import ArtistFactory
 from artists.models import Artist
+from django.urls import reverse
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
 
@@ -22,7 +21,9 @@ class AllArtistsTestCase(BaseTestCase):
     def test_artist_name_sorted(self):
         r = self.client.get(self.url)
         actual_names = self.css_select_get_text(r, 'td.artist-name')
-        expected_names = list(Artist.objects.values_list('name', flat=True).order_by('name'))
+        expected_names = list(
+            Artist.objects.values_list('name', flat=True).order_by('name')
+        )
         self.assertEqual(actual_names, expected_names)
 
     def test_link_to_drill_down(self):
@@ -38,9 +39,10 @@ class AllArtistsTestCase(BaseTestCase):
 class SingleArtistTestCase(BaseTestCase):
     @property
     def url(self):
-        return reverse('artists:single_artist',
-                       kwargs={'artist_id': self.artist.spotify_id},
-                       )
+        return reverse(
+            'artists:single_artist',
+            kwargs={'artist_id': self.artist.spotify_id},
+        )
 
     def setUp(self):
         super().setUp()
