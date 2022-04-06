@@ -130,3 +130,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
+AUTHENTICATION_BACKENDS = [
+       'backends.base.AuthBackend',
+       'django.contrib.auth.backends.ModelBackend',
+      ]

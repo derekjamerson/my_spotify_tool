@@ -1,9 +1,10 @@
 from urllib.parse import urlencode
 
 import requests
+from django.contrib.auth import get_user_model
+
 from albums.models import Album
 from artists.models import Artist
-from users.models import CustomUser
 from tracks.models import Track
 
 
@@ -35,13 +36,8 @@ class Spotify:
 
     def fetch_current_user(self):
         profile_url = 'https://api.spotify.com/v1/me'
-        response = self.get_response_json(profile_url, self.headers)
-        defaults = {
-            'username': response['display_name'] or response['email'],
-            'email': response['email'],
-        }
-        current_user, created = CustomUser.objects.update_or_create(pk=response['id'], defaults=defaults)
-        return current_user
+        spotify_user = self.get_response_json(profile_url, self.headers)
+        return spotify_user
 
     def pull_library_data(self):
         for track in self.tracks:
