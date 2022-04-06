@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^', include('base.urls')),
     re_path(r'^artists/', include('artists.urls')),
+    re_path(r'^tracks/', include('tracks.urls')),
 ]
