@@ -1,12 +1,11 @@
-import random
 import uuid
 
 import factory
 from albums.models import Album
 from artists.factories import ArtistFactory
-from tracks.models import Track
 
 
+# noinspection PyMethodParameters
 class AlbumFactory(factory.django.DjangoModelFactory):
     @factory.Sequence
     def name(n):

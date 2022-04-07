@@ -3,10 +3,10 @@ import uuid
 
 import factory
 from albums.factories import AlbumFactory
-from artists.factories import ArtistFactory
 from tracks.models import Track
 
 
+# noinspection PyMethodParameters
 class TrackFactory(factory.django.DjangoModelFactory):
     @factory.Sequence
     def name(n):

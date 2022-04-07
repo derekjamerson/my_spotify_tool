@@ -3,7 +3,6 @@ from urllib.parse import urlencode
 import requests
 from albums.models import Album
 from artists.models import Artist
-from django.contrib.auth import get_user_model
 from libraries.models import Library
 from tracks.models import Track
 

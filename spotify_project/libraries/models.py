@@ -10,7 +10,3 @@ class Library(models.Model):
         primary_key=True,
         related_name='library',
     )
-
-    @property
-    def track_count(self):
-        return self.tracks.count()
