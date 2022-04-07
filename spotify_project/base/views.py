@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from libraries.models import Library
 from spotify import Spotify
 from spotify.oauth import OAuth
 
@@ -35,9 +36,7 @@ def logout_view(request):
 
 
 def pull_data(request):
-    start_time = time.time()
     access_token = request.session['token_response']['access_token']
     spotify = Spotify(access_token)
-    spotify.pull_library_data()
-    print(f'time: {time.time() - start_time}')
+    spotify.pull_library_data(request.user)
     return HttpResponse()

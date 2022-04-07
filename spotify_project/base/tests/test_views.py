@@ -50,10 +50,16 @@ class PullDataTestCase(BaseTestCase):
         return r
 
     def test_GET_returns_200(self):
-        r = self.pull_data()
+        with mock.patch(
+            'spotify.base.Spotify.add_tracks_to_library', return_value=None
+        ):
+            r = self.pull_data()
         self.assertEqual(r.status_code, 200)
 
     def test_tracks_are_created(self):
         with self.assert_num_objects_created({Track: 1}):
-            r = self.pull_data()
+            with mock.patch(
+                'spotify.base.Spotify.add_tracks_to_library', return_value=None
+            ):
+                r = self.pull_data()
         self.assertEqual(r.status_code, 200)

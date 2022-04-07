@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
+from libraries.models import Library
 from spotify import Spotify
 
 
@@ -14,6 +15,8 @@ class AuthBackend(BaseBackend):
         user, created = get_user_model().objects.update_or_create(
             pk=spot_user['id'], defaults=defaults
         )
+        if created:
+            Library.objects.create(user=user)
         return user
 
     def get_user(self, spotify_id):
