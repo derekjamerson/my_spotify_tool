@@ -57,9 +57,18 @@ class SingleArtistTestCase(BaseTestCase):
         r = self.client.get(self.url)
         self.assertEqual(r.status_code, 200)
 
-    def test_track_names_present(self):
+    def test_track_names_sorted(self):
         r = self.client.get(self.url)
         actual_names = self.css_select_get_text(r, 'td.track-name')
         self.tracks.sort(key=attrgetter('name'))
         expected_names = [track.name for track in self.tracks]
         self.assertEqual(actual_names, expected_names)
+
+    def test_link_to_drill_down(self):
+        r = self.client.get(self.url)
+        actual_urls = self.css_select_get_attributes(r, 'td.track-name a', ['href'])
+        expected_urls = [
+            {'href': reverse('tracks:track_info', kwargs=dict(track_id=track.pk))}
+            for track in self.artist.tracks.all()
+        ]
+        self.assertCountEqual(actual_urls, expected_urls)
