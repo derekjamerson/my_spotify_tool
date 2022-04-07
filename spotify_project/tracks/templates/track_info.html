@@ -10,7 +10,7 @@
             <dd class="col-sm-9">
                 <ul class="list-group">
                 {% for artist in track.artists.all %}
-                    <li class="list-group-flush">
+                    <li class="list-group-flush artists">
                         <a href="{% url 'artists:single_artist' artist.spotify_id %}">
                             {{ artist.name }}
                         </a>
