@@ -1,11 +1,6 @@
-import time
-
-from backends.base import AuthBackend
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from libraries.models import Library
 from spotify import Spotify
 from spotify.oauth import OAuth
 
@@ -14,6 +9,7 @@ def index(request):
     return render(request, 'index.html')
 
 
+# noinspection PyUnusedLocal
 def spotify_login(request):
     oauth = OAuth()
     auth_url = oauth.create_auth_url()

@@ -1,7 +1,3 @@
-from operator import attrgetter
-
-from artists.factories import ArtistFactory
-from artists.models import Artist
 from django.urls import reverse
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
