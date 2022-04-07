@@ -8,10 +8,10 @@ class BaseTestCase(TestCase):
     @staticmethod
     def css_select_get_text(response, css_selector):
         soup = BeautifulSoup(response.content, features='html.parser')
-        names = []
+        text_groups = []
         for element in soup.select(css_selector):
-            names.append(element.text.strip())
-        return names
+            text_groups.append(element.text.strip())
+        return text_groups
 
     @staticmethod
     def css_select_get_attributes(response, css_selector, attributes):
