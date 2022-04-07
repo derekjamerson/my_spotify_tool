@@ -4,6 +4,7 @@ import requests
 from albums.models import Album
 from artists.models import Artist
 from django.contrib.auth import get_user_model
+from libraries.models import Library
 from tracks.models import Track
 
 
@@ -38,9 +39,18 @@ class Spotify:
         spotify_user = self.get_response_json(profile_url, self.headers)
         return spotify_user
 
-    def pull_library_data(self):
+    def pull_library_data(self, user):
+        tracks = []
         for track in self.tracks:
-            self.add_track_to_db(track)
+            tracks.append(self.add_track_to_db(track))
+        self.add_tracks_to_library(user, tracks)
+        return
+
+    @staticmethod
+    def add_tracks_to_library(user, tracks):
+        Library.objects.filter(user=user).delete()
+        library = Library.objects.create(user=user)
+        library.tracks.add(*tracks)
         return
 
     def add_track_to_db(self, track):
@@ -57,7 +67,7 @@ class Spotify:
             pk=track['id'], defaults=defaults
         )
         track_in_db.artists.add(*artists_pks)
-        return created
+        return track_in_db
 
     def add_array_of_artists(self, artists):
         artists_pks = []
