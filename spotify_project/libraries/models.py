@@ -10,3 +10,4 @@ class Library(models.Model):
         primary_key=True,
         related_name='library',
     )
+    artists = models.ManyToManyField('artists.Artist', related_name='libraries')

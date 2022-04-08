@@ -4,13 +4,13 @@ from django.shortcuts import get_object_or_404, render
 
 
 def all_artists(request):
-    artists = Artist.objects.all().order_by(Lower('name'))
+    artists = sorted(request.user.library.artists.all(), key=lambda x: x.name.lower())
     return render(request, 'all_artists.html', {'artists': artists})
 
 
 def single_artist(request, artist_id):
     artist = get_object_or_404(Artist, spotify_id=artist_id)
-    tracks = artist.tracks.order_by(Lower('name'))
+    tracks = request.user.library.tracks.filter(artists=artist).order_by(Lower('name'))
     return render(
         request, 'single_artist.html', {'name': artist.name, 'tracks': tracks}
     )

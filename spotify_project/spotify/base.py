@@ -45,11 +45,19 @@ class Spotify:
         self.add_tracks_to_library(user, tracks)
         return
 
-    @staticmethod
-    def add_tracks_to_library(user, tracks):
+    def add_tracks_to_library(self, user, tracks):
         Library.objects.filter(user=user).delete()
         library = Library.objects.create(user=user)
         library.tracks.add(*tracks)
+        self.add_artists_to_library(library, tracks)
+        return
+
+    @staticmethod
+    def add_artists_to_library(library, tracks):
+        hold_artists = set()
+        for track in tracks:
+            hold_artists.update([artist for artist in track.artists.all()])
+        library.artists.add(*hold_artists)
         return
 
     def add_track_to_db(self, track):
