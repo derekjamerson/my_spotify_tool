@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 
 
 def all_artists(request):
-    artists = sorted(request.user.library.artists.all(), key=lambda x: x.name.lower())
+    artists = request.user.library.artists.all().order_by(Lower('name'))
     return render(request, 'all_artists.html', {'artists': artists})
 
 
