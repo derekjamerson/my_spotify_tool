@@ -28,15 +28,6 @@ class TrackFactory(factory.django.DjangoModelFactory):
     def popularity(n):
         return random.randint(0, 100)
 
-    # @factory.post_generation
-    # def artists(self, create, extracted, **kwargs):
-    #     if not create:
-    #         return
-    #
-    #     if extracted is None:
-    #         extracted = ArtistFactory.create_batch(3)
-    #     self.artists.set(extracted)
-
     album = factory.SubFactory(AlbumFactory)
 
     class Meta:
