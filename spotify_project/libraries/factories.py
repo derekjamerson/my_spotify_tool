@@ -1,25 +1,22 @@
-import uuid
-
 import factory
 from libraries.models import Library
-from users.models import CustomUser
 
 
 # noinspection PyMethodParameters
 class LibraryFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
-    def tracks(self, create, extracted, **kwargs):
-        if not create or not extracted:
+    def tracks(self, create, tracks):
+        if not create or not tracks:
             return
 
-        self.tracks.add(*extracted)
+        self.tracks.add(*tracks)
 
     @factory.post_generation
-    def artists(self, create, extracted, **kwargs):
-        if not create or not extracted:
+    def artists(self, create, artists):
+        if not create or not artists:
             return
 
-        self.artists.add(*extracted)
+        self.artists.add(*artists)
 
     class Meta:
         model = Library

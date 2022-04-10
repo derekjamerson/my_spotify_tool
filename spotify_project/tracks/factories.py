@@ -29,15 +29,11 @@ class TrackFactory(factory.django.DjangoModelFactory):
         return random.randint(0, 100)
 
     @factory.post_generation
-    def artists(self, create, extracted, **kwargs):
-        if not create:
-            # Simple build, do nothing.
+    def artists(self, create, artists):
+        if not create or not artists:
             return
 
-        if extracted:
-            # A list of groups were passed in, use them
-            for artist in extracted:
-                self.artists.add(artist)
+        self.artists.add(*artists)
 
     album = factory.SubFactory(AlbumFactory)
 

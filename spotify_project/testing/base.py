@@ -1,8 +1,7 @@
 from contextlib import contextmanager
-from unittest import mock
 
 from bs4 import BeautifulSoup
-from django.test import Client, TestCase
+from django.test import TestCase
 
 
 class BaseTestCase(TestCase):
@@ -37,11 +36,3 @@ class BaseTestCase(TestCase):
         for Model in counts:
             delta = after_counts[Model] - before_counts[Model]
             self.assertEqual(delta, counts[Model], Model)
-
-    # @staticmethod
-    # def login(user):
-    #     with mock.patch(
-    #         'backends.base.AuthBackend.authenticate', return_value=user
-    #     ):
-    #         client = Client()
-    #         client.login(user)
