@@ -1,10 +1,11 @@
 from operator import attrgetter
 
 from artists.factories import ArtistFactory
-from artists.models import Artist
 from django.urls import reverse
+from libraries.factories import LibraryFactory
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
+from users.factories import CustomUserFactory
 
 
 class AllArtistsTestCase(BaseTestCase):
@@ -12,7 +13,12 @@ class AllArtistsTestCase(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        ArtistFactory.create_batch(3)
+        self.user = CustomUserFactory()
+        self.artist = ArtistFactory()
+        self.library = LibraryFactory(user=self.user, artists=[self.artist])
+        self.client.force_login(self.user)
+        # not included
+        ArtistFactory()
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)
@@ -22,7 +28,7 @@ class AllArtistsTestCase(BaseTestCase):
         r = self.client.get(self.url)
         actual_names = self.css_select_get_text(r, 'td.artist-name')
         expected_names = list(
-            Artist.objects.values_list('name', flat=True).order_by('name')
+            self.library.artists.values_list('name', flat=True).order_by('name')
         )
         self.assertEqual(actual_names, expected_names)
 
@@ -31,7 +37,7 @@ class AllArtistsTestCase(BaseTestCase):
         actual_urls = self.css_select_get_attributes(r, 'td.artist-name a', ['href'])
         expected_urls = [
             {'href': reverse('artists:single_artist', kwargs=dict(artist_id=artist.pk))}
-            for artist in Artist.objects.all()
+            for artist in self.library.artists.all()
         ]
         self.assertCountEqual(actual_urls, expected_urls)
 
@@ -46,11 +52,15 @@ class SingleArtistTestCase(BaseTestCase):
 
     def setUp(self):
         super().setUp()
+        self.user = CustomUserFactory()
         self.artist = ArtistFactory()
-        self.tracks = TrackFactory.create_batch(3)
-        for track in self.tracks:
-            track.artists.add(self.artist)
+        self.tracks = TrackFactory.create_batch(3, artists=[self.artist])
+        self.library = LibraryFactory(
+            user=self.user, tracks=self.tracks, artists=[self.artist]
+        )
+        self.client.force_login(self.user)
         # not included
+        ArtistFactory()
         TrackFactory()
 
     def test_GET_returns_200(self):
@@ -69,6 +79,6 @@ class SingleArtistTestCase(BaseTestCase):
         actual_urls = self.css_select_get_attributes(r, 'td.track-name a', ['href'])
         expected_urls = [
             {'href': reverse('tracks:track_info', kwargs=dict(track_id=track.pk))}
-            for track in self.artist.tracks.all()
+            for track in self.tracks
         ]
         self.assertCountEqual(actual_urls, expected_urls)

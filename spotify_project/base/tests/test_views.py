@@ -24,7 +24,7 @@ class PullDataTestCase(BaseTestCase):
     def get_album(self, num_artists=1):
         return {'artists': self.get_artists(num_artists), 'name': '', 'id': ''}
 
-    def get_tracks(self, num=1):
+    def get_tracks(self):
         return {
             'artists': self.get_artists(),
             'album': self.get_album(),
