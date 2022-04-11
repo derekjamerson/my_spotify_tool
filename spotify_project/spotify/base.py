@@ -42,10 +42,19 @@ class Spotify:
         tracks_dicts = list(self.tracks)
         artists_dicts = set(self.get_all_artists(tracks_dicts))
         self.add_artists_to_db(artists_dicts)
-        # create and save albums
-        # create m2m
-        # create and save tracks
-        # create m2m
+        # get albums in db
+        # check against new
+        # create album objects
+        # get tracks in db
+        # check against new
+        # create track objects
+        # to create m2m
+        #  pull through table
+        #    album-artist
+        #    track-artist
+        #  create through table objects
+        #    Album.artist.through(album_id=asdjifnalif, artist_id=jasndf;ajndf)
+        # bulk_create()
         return
 
     def get_all_artists(self, tracks):
