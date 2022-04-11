@@ -39,11 +39,32 @@ class Spotify:
         return spotify_user
 
     def pull_library_data(self, user):
-        tracks = []
-        for track in self.tracks:
-            tracks.append(self.add_track_to_db(track))
-        self.add_tracks_to_library(user, tracks)
+        tracks_dicts = list(self.tracks)
+        artists_dicts = set(self.get_all_artists(tracks_dicts))
+        self.add_artists_to_db(artists_dicts)
+        # create and save albums
+        # create m2m
+        # create and save tracks
+        # create m2m
         return
+
+    def get_all_artists(self, tracks):
+        for track in tracks:
+            for artist in track['artists']:
+                yield Artist(pk=artist['id'], name=artist['name'])
+            for artist in track['album']['artists']:
+                yield Artist(pk=artist['id'], name=artist['name'])
+
+    def add_artists_to_db(self, artists_dicts):
+        old_artists_pks = set(Artist.objects.values_list('pk', flat=True))
+        new_artists = self.get_new_artists(old_artists_pks, artists_dicts)
+        Artist.objects.bulk_create(new_artists)
+
+    def get_new_artists(self, old_pks, artists_dicts):
+        for artist in artists_dicts:
+            if artist.pk in old_pks:
+                continue
+            yield artist
 
     def add_tracks_to_library(self, user, tracks):
         Library.objects.filter(user=user).delete()
