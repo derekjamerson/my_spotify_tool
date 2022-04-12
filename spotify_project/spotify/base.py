@@ -40,21 +40,20 @@ class Spotify:
 
     def pull_library_data(self, user):
         tracks_dicts = list(self.tracks)
-        artists_dicts = set(self.get_all_artists(tracks_dicts))
-        self.add_artists_to_db(artists_dicts)
-        # get albums in db
-        # check against new
-        # create album objects
-        # get tracks in db
-        # check against new
-        # create track objects
-        # to create m2m
-        #  pull through table
-        #    album-artist
-        #    track-artist
-        #  create through table objects
-        #    Album.artist.through(album_id=asdjifnalif, artist_id=jasndf;ajndf)
-        # bulk_create()
+        unsaved_artists = set(self.get_all_artists(tracks_dicts))
+        self.add_artists_to_db(unsaved_artists)
+        unsaved_albums = set(self.get_all_albums(tracks_dicts))
+        self.add_albums_to_db(unsaved_albums)
+        unsaved_tracks = set(self.get_all_tracks(tracks_dicts))
+        self.add_tracks_to_db(unsaved_tracks)
+        unsaved_album_artist_throughs = set(
+            self.get_all_album_artist_through(tracks_dicts)
+        )
+        self.add_album_artist_through_to_db(unsaved_album_artist_throughs)
+        unsaved_track_artist_throughs = set(
+            self.get_all_track_artist_through(tracks_dicts)
+        )
+        self.add_track_artist_through_to_db(unsaved_track_artist_throughs)
         return
 
     def get_all_artists(self, tracks):
@@ -65,69 +64,93 @@ class Spotify:
                 yield Artist(pk=artist['id'], name=artist['name'])
 
     def add_artists_to_db(self, artists_dicts):
-        old_artists_pks = set(Artist.objects.values_list('pk', flat=True))
-        new_artists = self.get_new_artists(old_artists_pks, artists_dicts)
+        current_artist_pks = set(Artist.objects.values_list('pk', flat=True))
+        new_artists = self.get_new_artists(current_artist_pks, artists_dicts)
         Artist.objects.bulk_create(new_artists)
 
-    def get_new_artists(self, old_pks, artists_dicts):
-        for artist in artists_dicts:
+    def get_new_artists(self, old_pks, unsaved_artists):
+        for artist in unsaved_artists:
             if artist.pk in old_pks:
                 continue
             yield artist
 
-    def add_tracks_to_library(self, user, tracks):
-        Library.objects.filter(user=user).delete()
-        library = Library.objects.create(user=user)
-        library.tracks.add(*tracks)
-        self.add_artists_to_library(library, tracks)
-        return
-
-    @staticmethod
-    def add_artists_to_library(library, tracks):
-        hold_artists = set()
+    def get_all_albums(self, tracks):
         for track in tracks:
-            hold_artists.update([artist for artist in track.artists.all()])
-        library.artists.add(*hold_artists)
-        return
+            yield Album(pk=track['album']['id'], name=track['album']['name'])
 
-    def add_track_to_db(self, track):
-        artists_pks = self.add_array_of_artists(track['artists'])
-        album_in_db = self.add_album_to_db(track['album'])
-        defaults = {
-            'name': track['name'],
-            'duration_ms': track['duration_ms'],
-            'is_explicit': track['explicit'],
-            'popularity': track['popularity'],
-            'album': album_in_db,
-        }
-        track_in_db, created = Track.objects.update_or_create(
-            pk=track['id'], defaults=defaults
+    def add_albums_to_db(self, unsaved_albums):
+        current_album_pks = set(Album.objects.values_list('pk', flat=True))
+        new_albums = self.get_new_albums(current_album_pks, unsaved_albums)
+        Album.objects.bulk_create(new_albums)
+
+    def get_new_albums(self, current_album_pks, unsaved_albums):
+        for album in unsaved_albums:
+            if album.pk in current_album_pks:
+                continue
+            yield album
+
+    def get_all_tracks(self, tracks):
+        for track in tracks:
+            yield Track(
+                pk=track['id'],
+                name=track['name'],
+                album=track['album']['id'],
+                duration=track['duration_ms'],
+                is_explicit=track['is_explicit'],
+                popularity=track['popularity'],
+            )
+
+    def add_tracks_to_db(self, unsaved_tracks):
+        current_track_pks = set(Track.objects.values_list('pk', flat=True))
+        new_tracks = self.get_new_tracks(current_track_pks, unsaved_tracks)
+        Track.objects.bulk_create(new_tracks)
+
+    def get_new_tracks(self, current_track_pks, unsaved_tracks):
+        for track in unsaved_tracks:
+            if track.pk in current_track_pks:
+                continue
+            yield track
+
+    def get_all_album_artist_through(self, tracks):
+        for track in tracks:
+            for artist in track['album']['artists']:
+                yield track['album']['id'], artist['id']
+
+    def add_album_artist_through_to_db(self, unsaved_album_artist_throughs):
+        current_album_artist_throughs = set(
+            [(x.album, x.artist) for x in Album.artists.through.objects.all()]
         )
-        track_in_db.artists.add(*artists_pks)
-        return track_in_db
-
-    def add_array_of_artists(self, artists):
-        artists_pks = []
-        for artist in artists:
-            artists_pks.append(artist['id'])
-            self.add_artist_to_db(artist)
-        return artists_pks
-
-    @staticmethod
-    def add_artist_to_db(artist):
-        defaults = {
-            'name': artist['name'],
-        }
-        Artist.objects.update_or_create(pk=artist['id'], defaults=defaults)
-        return
-
-    def add_album_to_db(self, album):
-        artists_pks = self.add_array_of_artists(album['artists'])
-        defaults = {
-            'name': album['name'],
-        }
-        album_in_db, created = Album.objects.update_or_create(
-            pk=album['id'], defaults=defaults
+        new_album_artist_throughs = self.get_new_album_artist_throughs(
+            current_album_artist_throughs, unsaved_album_artist_throughs
         )
-        album_in_db.artists.add(*artists_pks)
-        return album_in_db
+        Album.artists.through.objects.bulk_create(new_album_artist_throughs)
+
+    def get_new_album_artist_throughs(
+        self, current_album_artist_throughs, unsaved_album_artist_throughs
+    ):
+        for new_through in unsaved_album_artist_throughs:
+            if new_through in current_album_artist_throughs:
+                continue
+            yield Album.artists.through(album=new_through[0], artist=new_through[1])
+
+    def get_all_track_artist_through(self, tracks):
+        for track in tracks:
+            for artist in track['track']['artists']:
+                yield track['track']['id'], artist['id']
+
+    def add_track_artist_through_to_db(self, unsaved_track_artist_throughs):
+        current_track_artist_throughs = set(
+            [(x.track, x.artist) for x in Track.artists.through.objects.all()]
+        )
+        new_track_artist_throughs = self.get_new_track_artist_throughs(
+            current_track_artist_throughs, unsaved_track_artist_throughs
+        )
+        Track.artists.through.objects.bulk_create(new_track_artist_throughs)
+
+    def get_new_track_artist_throughs(
+        self, current_track_artist_throughs, unsaved_track_artist_throughs
+    ):
+        for new_through in unsaved_track_artist_throughs:
+            if new_through in current_track_artist_throughs:
+                continue
+            yield Track.artists.through(track=new_through[0], artist=new_through[1])
