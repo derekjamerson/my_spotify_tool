@@ -9,7 +9,7 @@ from users.factories import CustomUserFactory
 
 
 class AllArtistsTestCase(BaseTestCase):
-    url = reverse('artists:all_artists')
+    url = reverse('artists:my_artists')
 
     def setUp(self):
         super().setUp()

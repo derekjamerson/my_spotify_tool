@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ user_name }}'s Library{% endblock title %}
+{% block content %}
+    <div class="container">
+        <div class="text-center" style="padding-bottom:65px">
+            <h1>{{ library.user.name }}'s Library</h1>
+        </div>
+        <dl class="row properties">
+            <dt class="col-sm-3">Last Updated</dt>
+            <dd class="col-sm-9">{{ library.last_updated }}</dd>
+            <dt class="col-sm-3">Top Artists</dt>
+            <dd class="col-sm-9">
+                <ul class="list-group">
+                {% for artist, count in library.top_artists.items %}
+                    <li class="list-group-flush">
+                            {{ artist.name }} - {{ count }}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </dd>
+        </dl>
+    </div>
+{% endblock content %}
