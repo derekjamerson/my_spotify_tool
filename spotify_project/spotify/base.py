@@ -46,14 +46,10 @@ class Spotify:
         self.add_albums_to_db(unsaved_albums)
         unsaved_tracks = set(self.get_all_tracks(tracks_dicts))
         self.add_tracks_to_db(unsaved_tracks)
-        unsaved_album_artist_throughs = set(
-            self.get_all_album_artist_through(tracks_dicts)
-        )
-        self.add_album_artist_through_to_db(unsaved_album_artist_throughs)
-        unsaved_track_artist_throughs = set(
-            self.get_all_track_artist_through(tracks_dicts)
-        )
-        self.add_track_artist_through_to_db(unsaved_track_artist_throughs)
+        unsaved_a_a_thrus = set(self.get_all_a_a_thru(tracks_dicts))
+        self.add_a_a_thru_to_db(unsaved_a_a_thrus)
+        unsaved_t_a_thrus = set(self.get_all_t_a_thru(tracks_dicts))
+        self.add_t_a_thru_to_db(unsaved_t_a_thrus)
         return
 
     def get_all_artists(self, tracks):
@@ -111,46 +107,38 @@ class Spotify:
                 continue
             yield track
 
-    def get_all_album_artist_through(self, tracks):
+    def get_all_a_a_thru(self, tracks):
         for track in tracks:
             for artist in track['album']['artists']:
                 yield track['album']['id'], artist['id']
 
-    def add_album_artist_through_to_db(self, unsaved_album_artist_throughs):
-        current_album_artist_throughs = set(
+    def add_a_a_thru_to_db(self, unsaved_a_a_thrus):
+        current_a_a_thrus = set(
             [(x.album, x.artist) for x in Album.artists.through.objects.all()]
         )
-        new_album_artist_throughs = self.get_new_album_artist_throughs(
-            current_album_artist_throughs, unsaved_album_artist_throughs
-        )
-        Album.artists.through.objects.bulk_create(new_album_artist_throughs)
+        new_a_a_thrus = self.get_new_a_a_thrus(current_a_a_thrus, unsaved_a_a_thrus)
+        Album.artists.through.objects.bulk_create(new_a_a_thrus)
 
-    def get_new_album_artist_throughs(
-        self, current_album_artist_throughs, unsaved_album_artist_throughs
-    ):
-        for new_through in unsaved_album_artist_throughs:
-            if new_through in current_album_artist_throughs:
+    def get_new_a_a_thrus(self, current_a_a_thrus, unsaved_a_a_thrus):
+        for new_through in unsaved_a_a_thrus:
+            if new_through in current_a_a_thrus:
                 continue
             yield Album.artists.through(album=new_through[0], artist=new_through[1])
 
-    def get_all_track_artist_through(self, tracks):
+    def get_all_t_a_thru(self, tracks):
         for track in tracks:
             for artist in track['track']['artists']:
                 yield track['track']['id'], artist['id']
 
-    def add_track_artist_through_to_db(self, unsaved_track_artist_throughs):
-        current_track_artist_throughs = set(
+    def add_t_a_thru_to_db(self, unsaved_t_a_thrus):
+        current_t_a_thrus = set(
             [(x.track, x.artist) for x in Track.artists.through.objects.all()]
         )
-        new_track_artist_throughs = self.get_new_track_artist_throughs(
-            current_track_artist_throughs, unsaved_track_artist_throughs
-        )
-        Track.artists.through.objects.bulk_create(new_track_artist_throughs)
+        new_t_a_thrus = self.get_new_t_a_thrus(current_t_a_thrus, unsaved_t_a_thrus)
+        Track.artists.through.objects.bulk_create(new_t_a_thrus)
 
-    def get_new_track_artist_throughs(
-        self, current_track_artist_throughs, unsaved_track_artist_throughs
-    ):
-        for new_through in unsaved_track_artist_throughs:
-            if new_through in current_track_artist_throughs:
+    def get_new_t_a_thrus(self, current_t_a_thrus, unsaved_t_a_thrus):
+        for new_through in unsaved_t_a_thrus:
+            if new_through in current_t_a_thrus:
                 continue
             yield Track.artists.through(track=new_through[0], artist=new_through[1])
