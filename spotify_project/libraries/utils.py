@@ -3,10 +3,12 @@ from libraries.models import Library
 
 class LibraryUtils:
     def add_library_to_db(self, tracks, user):
+        user.library.delete()
         library = Library.objects.create(
-            tracks=set([track['id'] for track in tracks]),
             user=user,
         )
+        track_pks = set([track['id'] for track in tracks])
+        library.tracks.set(track_pks)
         artist_pks = set(self.get_all_artist_pks(tracks))
         library.artists.set(artist_pks)
 

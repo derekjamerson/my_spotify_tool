@@ -34,9 +34,11 @@ class AlbumUtils:
     @staticmethod
     def get_new_album_artist_throughs(unsaved_throughs):
         current_throughs = set(
-            [(x.album, x.artist) for x in Album.artists.through.objects.all()]
+            [(x.album_id, x.artist_id) for x in Album.artists.through.objects.all()]
         )
         for new_through in unsaved_throughs:
             if new_through in current_throughs:
                 continue
-            yield Album.artists.through(album=new_through[0], artist=new_through[1])
+            yield Album.artists.through(
+                album_id=new_through[0], artist_id=new_through[1]
+            )

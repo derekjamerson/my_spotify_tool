@@ -13,9 +13,9 @@ class TrackUtils:
             yield Track(
                 pk=track['id'],
                 name=track['name'],
-                album=track['album']['id'],
+                album_id=track['album']['id'],
                 duration=track['duration_ms'],
-                is_explicit=track['is_explicit'],
+                is_explicit=track['explicit'],
                 popularity=track['popularity'],
             )
 
@@ -35,15 +35,17 @@ class TrackUtils:
     @staticmethod
     def get_all_track_artist_throughs(tracks):
         for track in tracks:
-            for artist in track['track']['artists']:
-                yield track['track']['id'], artist['id']
+            for artist in track['artists']:
+                yield track['id'], artist['id']
 
     @staticmethod
     def get_new_track_artist_throughs(unsaved_throughs):
         current_throughs = set(
-            [(x.track, x.artist) for x in Track.artists.through.objects.all()]
+            [(x.track_id, x.artist_id) for x in Track.artists.through.objects.all()]
         )
         for new_through in unsaved_throughs:
             if new_through in current_throughs:
                 continue
-            yield Track.artists.through(track=new_through[0], artist=new_through[1])
+            yield Track.artists.through(
+                track_id=new_through[0], artist_id=new_through[1]
+            )
