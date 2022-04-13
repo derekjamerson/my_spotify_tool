@@ -2,7 +2,6 @@ import random
 import uuid
 
 import factory
-from albums.factories import AlbumFactory
 from tracks.models import Track
 
 
@@ -34,8 +33,6 @@ class TrackFactory(factory.django.DjangoModelFactory):
             return
 
         self.artists.add(*artists)
-
-    album = factory.SubFactory(AlbumFactory)
 
     class Meta:
         model = Track

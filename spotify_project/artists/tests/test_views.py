@@ -1,5 +1,6 @@
 from operator import attrgetter
 
+from albums.factories import AlbumFactory
 from artists.factories import ArtistFactory
 from django.urls import reverse
 from libraries.factories import LibraryFactory
@@ -54,14 +55,16 @@ class SingleArtistTestCase(BaseTestCase):
         super().setUp()
         self.user = CustomUserFactory()
         self.artist = ArtistFactory()
-        self.tracks = TrackFactory.create_batch(3, artists=[self.artist])
+        self.tracks = TrackFactory.create_batch(
+            3, artists=[self.artist], album=AlbumFactory()
+        )
         self.library = LibraryFactory(
             user=self.user, tracks=self.tracks, artists=[self.artist]
         )
         self.client.force_login(self.user)
         # not included
         ArtistFactory()
-        TrackFactory()
+        TrackFactory(album=AlbumFactory())
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)

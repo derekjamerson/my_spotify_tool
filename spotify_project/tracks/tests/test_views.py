@@ -1,3 +1,4 @@
+from albums.factories import AlbumFactory
 from django.urls import reverse
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
@@ -13,7 +14,7 @@ class TrackInfoTestCase(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.track = TrackFactory()
+        self.track = TrackFactory(album=AlbumFactory())
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)

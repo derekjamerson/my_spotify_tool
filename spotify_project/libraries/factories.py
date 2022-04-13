@@ -16,7 +16,7 @@ class LibraryFactory(factory.django.DjangoModelFactory):
         if not create or not artists:
             return
 
-        self.artists.add(*artists)
+        self.artists.set(artists)
 
     class Meta:
         model = Library
