@@ -1,6 +1,5 @@
 from operator import attrgetter
 
-from albums.factories import AlbumFactory
 from artists.factories import ArtistFactory
 from django.urls import reverse
 from libraries.factories import LibraryFactory

@@ -1,4 +1,3 @@
-from albums.factories import AlbumFactory
 from django.urls import reverse
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
