@@ -1,6 +1,5 @@
 from operator import itemgetter
 
-from albums.factories import AlbumFactory
 from artists.factories import ArtistFactory
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
@@ -11,12 +10,10 @@ from tracks.utils import TrackUtils
 class TrackUtilsTestCase(BaseTestCase):
     def setUp(self):
         self.track_utils = TrackUtils()
-        self.artists = ArtistFactory.create_batch(3)
-        self.albums = AlbumFactory.create_batch(3, artists=self.artists)
-        self.tracks = []
-        self.tracks.append(TrackFactory(artists=self.artists, album=self.albums[0]))
+        self.artists = [ArtistFactory()]
+        self.track = TrackFactory(artists=self.artists)
         # not included
-        TrackFactory(album=AlbumFactory(), artists=[ArtistFactory()])
+        TrackFactory(artists=[ArtistFactory()])
 
     def test_add_tracks_to_db(self):
         self.add_dummy_objects_to_db(add_tracks=False)
@@ -32,7 +29,7 @@ class TrackUtilsTestCase(BaseTestCase):
 
     def test_get_new_tracks(self):
         unsaved_tracks = TrackFactory.build_batch(2)
-        unsaved_tracks.append(self.tracks[0])
+        unsaved_tracks.append(self.track)
         new_tracks = list(self.track_utils.get_new_tracks(unsaved_tracks))
         self.assertEqual(len(new_tracks), 2)
 
@@ -56,11 +53,11 @@ class TrackUtilsTestCase(BaseTestCase):
             self.assertEqual(through, expected_throughs[count])
 
     def test_new_track_artist_throughs(self):
-        new_track = TrackFactory(album=self.albums[1])
+        new_track = TrackFactory()
         unsaved_throughs = [
             (new_track.pk, self.artists[0].pk),
-            (new_track.pk, self.artists[1].pk),
-            (self.tracks[0].pk, self.artists[0].pk),
+            (new_track.pk, self.artists[0].pk),
+            (self.track.pk, self.artists[0].pk),
         ]
         new_throughs = list(
             self.track_utils.get_new_track_artist_throughs(unsaved_throughs)
