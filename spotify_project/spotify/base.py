@@ -14,6 +14,10 @@ class Spotify:
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {self.token}',
         }
+        self.artist_utils = ArtistUtils()
+        self.album_utils = AlbumUtils()
+        self.track_utils = TrackUtils()
+        self.library_utils = LibraryUtils()
 
     @staticmethod
     def get_response_json(url, headers, limit='50'):
@@ -40,10 +44,10 @@ class Spotify:
 
     def pull_library_data(self, user):
         track_dicts = list(self.tracks)
-        ArtistUtils().add_artists_to_db(track_dicts)
-        AlbumUtils().add_albums_to_db(track_dicts)
-        TrackUtils().add_tracks_to_db(track_dicts)
-        AlbumUtils().add_album_artist_m2m(track_dicts)
-        TrackUtils().add_track_artist_m2m(track_dicts)
-        LibraryUtils().add_library_to_db(track_dicts, user)
+        self.artist_utils.add_artists_to_db(track_dicts)
+        self.album_utils.add_albums_to_db(track_dicts)
+        self.track_utils.add_tracks_to_db(track_dicts)
+        self.album_utils.add_album_artist_m2m(track_dicts)
+        self.track_utils.add_track_artist_m2m(track_dicts)
+        self.library_utils.add_library_to_db(track_dicts, user)
         return

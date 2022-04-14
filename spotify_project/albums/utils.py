@@ -36,9 +36,7 @@ class AlbumUtils:
         current_throughs = set(
             [(x.album_id, x.artist_id) for x in Album.artists.through.objects.all()]
         )
-        for new_through in unsaved_throughs:
-            if new_through in current_throughs:
+        for album_id, artist_id in unsaved_throughs:
+            if (album_id, artist_id) in current_throughs:
                 continue
-            yield Album.artists.through(
-                album_id=new_through[0], artist_id=new_through[1]
-            )
+            yield Album.artists.through(album_id=album_id, artist_id=artist_id)
