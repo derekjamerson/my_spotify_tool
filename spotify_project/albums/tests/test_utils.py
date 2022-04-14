@@ -10,8 +10,8 @@ from testing import BaseTestCase
 class AlbumUtilsTestCase(BaseTestCase):
     def setUp(self):
         self.album_utils = AlbumUtils()
-        self.artists = ArtistFactory.create_batch(3)
-        self.albums = AlbumFactory.create_batch(3, artists=self.artists)
+        self.artist = ArtistFactory()
+        self.album = AlbumFactory(artists=[self.artist])
         # not included
         AlbumFactory(artists=[ArtistFactory()])
 
@@ -28,7 +28,7 @@ class AlbumUtilsTestCase(BaseTestCase):
 
     def test_get_new_albums(self):
         unsaved_albums = AlbumFactory.build_batch(2)
-        unsaved_albums.append(self.albums[0])
+        unsaved_albums.append(self.album)
         new_albums = list(self.album_utils.get_new_albums(unsaved_albums))
         self.assertEqual(len(new_albums), 2)
 
@@ -56,11 +56,10 @@ class AlbumUtilsTestCase(BaseTestCase):
     def test_new_album_artist_throughs(self):
         new_album = AlbumFactory()
         unsaved_throughs = [
-            (new_album.pk, self.artists[0].pk),
-            (new_album.pk, self.artists[1].pk),
-            (self.albums[0].pk, self.artists[0].pk),
+            (new_album.pk, self.artist.pk),
+            (self.album.pk, self.artist.pk),
         ]
         new_throughs = list(
             self.album_utils.get_new_album_artist_throughs(unsaved_throughs)
         )
-        self.assertEqual(len(new_throughs), 2)
+        self.assertEqual(len(new_throughs), 1)
