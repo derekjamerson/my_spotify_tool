@@ -55,16 +55,14 @@ class SingleArtistTestCase(BaseTestCase):
         super().setUp()
         self.user = CustomUserFactory()
         self.artist = ArtistFactory()
-        self.tracks = TrackFactory.create_batch(
-            3, artists=[self.artist], album=AlbumFactory()
-        )
+        self.tracks = TrackFactory.create_batch(3, artists=[self.artist])
         self.library = LibraryFactory(
             user=self.user, tracks=self.tracks, artists=[self.artist]
         )
         self.client.force_login(self.user)
         # not included
         ArtistFactory()
-        TrackFactory(album=AlbumFactory())
+        TrackFactory()
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)

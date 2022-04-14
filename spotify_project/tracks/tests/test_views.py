@@ -14,7 +14,7 @@ class TrackInfoTestCase(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        self.track = TrackFactory(album=AlbumFactory())
+        self.track = TrackFactory()
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)
