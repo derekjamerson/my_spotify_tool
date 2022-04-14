@@ -1,10 +1,10 @@
 from urllib.parse import urlencode
 
 import requests
-from albums.models import Album
-from artists.models import Artist
-from libraries.models import Library
-from tracks.models import Track
+from albums.utils import AlbumUtils
+from artists.utils import ArtistUtils
+from libraries.utils import LibraryUtils
+from tracks.utils import TrackUtils
 
 
 class Spotify:
@@ -14,6 +14,10 @@ class Spotify:
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {self.token}',
         }
+        self.artist_utils = ArtistUtils()
+        self.album_utils = AlbumUtils()
+        self.track_utils = TrackUtils()
+        self.library_utils = LibraryUtils()
 
     @staticmethod
     def get_response_json(url, headers, limit='50'):
@@ -39,65 +43,11 @@ class Spotify:
         return spotify_user
 
     def pull_library_data(self, user):
-        tracks = []
-        for track in self.tracks:
-            tracks.append(self.add_track_to_db(track))
-        self.add_tracks_to_library(user, tracks)
+        track_dicts = list(self.tracks)
+        self.artist_utils.add_artists_to_db(track_dicts)
+        self.album_utils.add_albums_to_db(track_dicts)
+        self.track_utils.add_tracks_to_db(track_dicts)
+        self.album_utils.add_album_artist_m2m(track_dicts)
+        self.track_utils.add_track_artist_m2m(track_dicts)
+        self.library_utils.add_library_to_db(track_dicts, user)
         return
-
-    def add_tracks_to_library(self, user, tracks):
-        Library.objects.filter(user=user).delete()
-        library = Library.objects.create(user=user)
-        library.tracks.add(*tracks)
-        self.add_artists_to_library(library, tracks)
-        return
-
-    @staticmethod
-    def add_artists_to_library(library, tracks):
-        hold_artists = set()
-        for track in tracks:
-            hold_artists.update([artist for artist in track.artists.all()])
-        library.artists.add(*hold_artists)
-        return
-
-    def add_track_to_db(self, track):
-        artists_pks = self.add_array_of_artists(track['artists'])
-        album_in_db = self.add_album_to_db(track['album'])
-        defaults = {
-            'name': track['name'],
-            'duration_ms': track['duration_ms'],
-            'is_explicit': track['explicit'],
-            'popularity': track['popularity'],
-            'album': album_in_db,
-        }
-        track_in_db, created = Track.objects.update_or_create(
-            pk=track['id'], defaults=defaults
-        )
-        track_in_db.artists.add(*artists_pks)
-        return track_in_db
-
-    def add_array_of_artists(self, artists):
-        artists_pks = []
-        for artist in artists:
-            artists_pks.append(artist['id'])
-            self.add_artist_to_db(artist)
-        return artists_pks
-
-    @staticmethod
-    def add_artist_to_db(artist):
-        defaults = {
-            'name': artist['name'],
-        }
-        Artist.objects.update_or_create(pk=artist['id'], defaults=defaults)
-        return
-
-    def add_album_to_db(self, album):
-        artists_pks = self.add_array_of_artists(album['artists'])
-        defaults = {
-            'name': album['name'],
-        }
-        album_in_db, created = Album.objects.update_or_create(
-            pk=album['id'], defaults=defaults
-        )
-        album_in_db.artists.add(*artists_pks)
-        return album_in_db

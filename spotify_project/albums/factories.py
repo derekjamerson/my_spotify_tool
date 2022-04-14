@@ -2,7 +2,6 @@ import uuid
 
 import factory
 from albums.models import Album
-from artists.factories import ArtistFactory
 
 
 # noinspection PyMethodParameters
@@ -15,13 +14,12 @@ class AlbumFactory(factory.django.DjangoModelFactory):
     def spotify_id(n):
         return str(uuid.uuid4())
 
-    @staticmethod
-    def artists():
-        result = []
-        for _ in range(3):
-            new_artist = ArtistFactory.create()
-            result.append(new_artist)
-        return result
+    @factory.post_generation
+    def artists(self, create, artists):
+        if not create or not artists:
+            return
+
+        self.artists.add(*artists)
 
     class Meta:
         model = Album

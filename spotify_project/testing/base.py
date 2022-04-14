@@ -1,7 +1,11 @@
+import json
 from contextlib import contextmanager
 
+from albums.factories import AlbumFactory
+from artists.factories import ArtistFactory
 from bs4 import BeautifulSoup
 from django.test import TestCase
+from tracks.factories import TrackFactory
 
 
 class BaseTestCase(TestCase):
@@ -36,3 +40,34 @@ class BaseTestCase(TestCase):
         for Model in counts:
             delta = after_counts[Model] - before_counts[Model]
             self.assertEqual(delta, counts[Model], Model)
+
+    @property
+    def dummy_library_data(self):
+        with open('../track_response_example.json') as json_file:
+            dummy_data = json.load(json_file)
+        for track in dummy_data['items']:
+            yield track['track']
+
+    def add_dummy_objects_to_db(self, add_tracks=True):
+        artists_to_be_added = []
+        albums_to_be_added = []
+        tracks_to_be_added = []
+        for track in self.dummy_library_data:
+            for artist in track['artists']:
+                new_artist = ArtistFactory.build(pk=artist['id'], name=artist['name'])
+                artists_to_be_added.append(new_artist)
+            new_album = AlbumFactory.build(
+                pk=track['album']['id'], name=track['album']['name']
+            )
+            albums_to_be_added.append(new_album)
+            new_track = TrackFactory.build(
+                pk=track['id'], name=track['name'], album=new_album
+            )
+            tracks_to_be_added.append(new_track)
+        for artist in set(artists_to_be_added):
+            artist.save()
+        for album in set(albums_to_be_added):
+            album.save()
+        if add_tracks:
+            for track in set(tracks_to_be_added):
+                track.save()
