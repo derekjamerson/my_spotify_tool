@@ -1,3 +1,4 @@
+import datetime
 from collections import defaultdict
 from operator import itemgetter
 
@@ -27,3 +28,11 @@ class Library(models.Model):
         list_tuples.sort(key=itemgetter(1), reverse=True)
         result = dict(list_tuples[:10])
         return result
+
+    @property
+    def total_duration(self):
+        result = 0
+        for track in self.tracks.all():
+            result += int(track.duration_ms)
+        result = result // 1000000 * 1000000
+        return datetime.timedelta(milliseconds=result)
