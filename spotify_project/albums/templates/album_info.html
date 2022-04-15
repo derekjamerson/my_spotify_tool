@@ -9,7 +9,7 @@
             <dt class="col-sm-3">Artists</dt>
             <dd class="col-sm-9">
                 <ul class="list-group">
-                {% for artist in album.artists.all %}
+                {% for artist in album.artists.all|dictsort:"spotify_id" %}
                     <li class="list-group-flush artists">
                         <a href="{% url 'artists:single_artist' artist.spotify_id %}">
                             {{ artist.name }}
@@ -21,8 +21,8 @@
             <dt class="col-sm-3">Tracks</dt>
             <dd class="col-sm-9">
                 <ul class="list-group">
-                {% for track in album.tracks.all %}
-                    <li class="list-group-flush artists">
+                {% for track in album.tracks.all|dictsort:"spotify_id" %}
+                    <li class="list-group-flush tracks">
                         <a href="{% url 'tracks:track_info' track.spotify_id %}">
                             {{ track.name }}
                         </a>

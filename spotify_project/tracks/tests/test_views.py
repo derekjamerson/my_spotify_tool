@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from django.urls import reverse
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
@@ -36,6 +38,7 @@ class TrackInfoTestCase(BaseTestCase):
         r = self.client.get(self.url)
         actual_artist_list = self.css_select_get_text(r, 'li.artists a')
         expected_artist_list = [artist.name for artist in self.track.artists.all()]
+        expected_artist_list.sort(key=attrgetter('name'))
         self.assertEqual(actual_artist_list, expected_artist_list)
 
     def test_link_to_drill_down(self):

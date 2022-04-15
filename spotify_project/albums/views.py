@@ -7,5 +7,5 @@ def album_info(request, album_id):
     return render(
         request,
         'album_info.html',
-        {'track': album},
+        {'album': album},
     )
