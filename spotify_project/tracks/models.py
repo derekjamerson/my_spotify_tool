@@ -15,6 +15,7 @@ class Track(models.Model):
 
     @property
     def duration_string(self):
+        # noinspection PyTypeChecker
         seconds, milliseconds = divmod(int(self.duration_ms), 1000)
         minutes, seconds = divmod(seconds, 60)
         hours, minutes = divmod(minutes, 60)
