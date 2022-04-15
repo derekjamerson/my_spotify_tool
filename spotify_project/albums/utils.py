@@ -10,7 +10,10 @@ class AlbumUtils:
     @staticmethod
     def get_all_albums(tracks):
         for track in tracks:
-            yield Album(pk=track['album']['id'], name=track['album']['name'])
+            album = track['album']
+            yield Album(
+                pk=album['id'], name=album['name'], release_date=album['release_date']
+            )
 
     @staticmethod
     def get_new_albums(unsaved_albums):
