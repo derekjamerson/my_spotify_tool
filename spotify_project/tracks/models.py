@@ -9,19 +9,20 @@ class Track(models.Model):
     album = models.ForeignKey(
         'albums.Album', on_delete=models.CASCADE, related_name='tracks'
     )
-    duration_ms = models.CharField(max_length=6)
+    duration_ms = models.CharField(max_length=7)
     is_explicit = models.BooleanField(default=False)
     popularity = models.CharField(max_length=3)
 
     @property
-    def duration(self):
-        seconds = (int(self.duration_ms) / 1000) % 60
-        minutes = (int(self.duration_ms) / (1000 * 60)) % 60
-        return f'{int(minutes)}:{round(seconds)}'
-
-    @duration.setter
-    def duration(self, value):
-        self.duration_ms = value
+    def duration_string(self):
+        seconds, milliseconds = divmod(int(self.duration_ms), 1000)
+        minutes, seconds = divmod(seconds, 60)
+        hours, minutes = divmod(minutes, 60)
+        if hours:
+            return f'{hours:02d}:{minutes:02d}:{seconds:02d}'
+        if minutes:
+            return f'{minutes:02d}:{seconds:02d}'
+        return str(seconds)
 
     def __str__(self):
         return self.name
