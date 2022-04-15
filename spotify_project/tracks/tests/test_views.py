@@ -23,9 +23,9 @@ class TrackInfoTestCase(BaseTestCase):
 
     def test_properties_present(self):
         r = self.client.get(self.url)
-        actual_properties = self.css_select_get_text(r, 'dl.properties dd')
+        actual_properties = self.css_select_get_text(r, 'dd.property')
         expected_properties = [
-            '',
+            self.track.name,
             self.track.album.name,
             self.track.spotify_id,
             str(self.track.duration),

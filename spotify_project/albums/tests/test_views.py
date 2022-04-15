@@ -27,10 +27,9 @@ class AlbumInfoTestCase(BaseTestCase):
 
     def test_properties_present(self):
         r = self.client.get(self.url)
-        actual_properties = self.css_select_get_text(r, 'dl.properties dd')
+        actual_properties = self.css_select_get_text(r, 'dd.property')
         expected_properties = [
-            '',
-            '',
+            self.album.name,
             self.album.spotify_id,
             self.album.release_date,
         ]
@@ -40,14 +39,14 @@ class AlbumInfoTestCase(BaseTestCase):
         r = self.client.get(self.url)
         actual_artist_list = self.css_select_get_text(r, 'li.artists a')
         expected_artist_list = [artist.name for artist in self.album.artists.all()]
-        expected_artist_list.sort(key=attrgetter('name'))
+        expected_artist_list.sort()
         self.assertEqual(actual_artist_list, expected_artist_list)
 
     def test_tracks_present(self):
         r = self.client.get(self.url)
         actual_track_list = self.css_select_get_text(r, 'li.tracks a')
         expected_track_list = [track.name for track in self.album.tracks.all()]
-        expected_track_list.sort(key=attrgetter('name'))
+        expected_track_list.sort()
         self.assertEqual(actual_track_list, expected_track_list)
 
     def test_link_to_artist_drill_down(self):
@@ -63,7 +62,7 @@ class AlbumInfoTestCase(BaseTestCase):
         r = self.client.get(self.url)
         actual_urls = self.css_select_get_attributes(r, 'li.tracks a', ['href'])
         expected_urls = [
-            {'href': reverse('tracks:single_track', kwargs=dict(track_id=track.pk))}
+            {'href': reverse('tracks:track_info', kwargs=dict(track_id=track.pk))}
             for track in self.album.tracks.all()
         ]
         self.assertCountEqual(actual_urls, expected_urls)
