@@ -14,7 +14,7 @@ class TrackUtils:
                 pk=track['id'],
                 name=track['name'],
                 album_id=track['album']['id'],
-                duration=track['duration_ms'],
+                duration_ms=track['duration_ms'],
                 is_explicit=track['explicit'],
                 popularity=track['popularity'],
             )
