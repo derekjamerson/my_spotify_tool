@@ -18,6 +18,13 @@ class Library(models.Model):
     last_updated = models.DateTimeField(auto_now_add=True, blank=True)
 
     @property
+    def last_updated_iso(self):
+        # noinspection PyUnresolvedReferences
+        updated_tz = self.last_updated.astimezone(None)
+        time_string = updated_tz.isoformat(sep=' ', timespec='seconds')
+        return time_string[:19]
+
+    @property
     def top_artists(self):
         artist_dict = defaultdict(int)
         for track in self.tracks.all().prefetch_related('artists'):
