@@ -28,7 +28,7 @@ class TrackInfoTestCase(BaseTestCase):
             self.track.name,
             self.track.album.name,
             self.track.spotify_id,
-            str(self.track.duration),
+            self.track.duration_string,
             'Yes' if self.track.is_explicit else 'No',
             str(self.track.popularity),
         ]

@@ -1,4 +1,3 @@
-import datetime
 from collections import defaultdict
 from operator import itemgetter
 
@@ -34,5 +33,14 @@ class Library(models.Model):
         result = 0
         for track in self.tracks.all():
             result += int(track.duration_ms)
-        result = result // 1000000 * 1000000
-        return datetime.timedelta(milliseconds=result)
+        seconds, milliseconds = divmod(result, 1000)
+        minutes, seconds = divmod(seconds, 60)
+        hours, minutes = divmod(minutes, 60)
+        days, hours = divmod(hours, 24)
+        if days:
+            return f'{days:03d}:{hours:02d}:{minutes:02d}:{seconds:02d}'
+        if hours:
+            return f'{hours:02d}:{minutes:02d}:{seconds:02d}'
+        if minutes:
+            return f'{minutes:02d}:{seconds:02d}'
+        return str(seconds)
