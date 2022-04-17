@@ -32,7 +32,10 @@ class LibraryStatsTestCase(BaseTestCase):
         expected_properties = [
             self.user.username,
             self.library.last_updated_iso,
+            str(self.library.count_tracks),
+            str(self.library.count_artists),
             self.library.total_duration,
+            str(self.library.avg_pop),
         ]
         self.assertEqual(actual_properties, expected_properties)
 
