@@ -6,15 +6,17 @@
             <h1>Library Stats</h1>
         </div>
         <dl class="row properties">
+            <dt class="col-sm-3">User</dt>
+            <dd class="col-sm-9 property">{{ library.user.username }}</dd>
             <dt class="col-sm-3">Last Updated</dt>
-            <dd class="col-sm-9">{{ library.last_updated }}</dd>
+            <dd class="col-sm-9 property">{{ library.last_updated_iso }}</dd>
             <dt class="col-sm-3">Total Duration</dt>
-            <dd class="col-sm-9">{{ library.total_duration }}</dd>
+            <dd class="col-sm-9 property">{{ library.total_duration }}</dd>
             <dt class="col-sm-3">Top Artists</dt>
             <dd class="col-sm-9">
                 <ul class="list-group">
                 {% for artist, count in library.top_artists.items %}
-                    <li class="list-group-flush">
+                    <li class="list-group-flush artist">
                             {{ artist.name }} - {{ count }}
                     </li>
                 {% endfor %}
