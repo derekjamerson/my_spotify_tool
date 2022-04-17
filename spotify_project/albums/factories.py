@@ -2,6 +2,7 @@ import uuid
 
 import factory
 from albums.models import Album
+from faker import Faker
 
 
 # noinspection PyMethodParameters
@@ -20,6 +21,10 @@ class AlbumFactory(factory.django.DjangoModelFactory):
             return
 
         self.artists.add(*artists)
+
+    @factory.Sequence
+    def release_date(n):
+        return Faker().date()
 
     class Meta:
         model = Album
