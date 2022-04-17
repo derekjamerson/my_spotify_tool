@@ -6,6 +6,8 @@ from spotify.oauth import OAuth
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return redirect(reverse('libraries:my_library_stats'))
     return render(request, 'index.html')
 
 
@@ -23,6 +25,7 @@ def spotify_callback(request):
     user = authenticate(access_token=access_token)
     if user is not None:
         login(request, user)
+        return redirect(reverse('libraries:my_library_stats'))
     return redirect(reverse('base:index'))
 
 
