@@ -51,3 +51,18 @@ class Library(models.Model):
         if minutes:
             return f'{minutes:02d}:{seconds:02d}'
         return str(seconds)
+
+    @property
+    def count_tracks(self):
+        return len(self.tracks.all())
+
+    @property
+    def count_artists(self):
+        return len(self.artists.all())
+
+    @property
+    def avg_pop(self):
+        total_pop = 0
+        for track in self.tracks.all():
+            total_pop += int(track.popularity)
+        return round(total_pop / self.count_tracks, 2)

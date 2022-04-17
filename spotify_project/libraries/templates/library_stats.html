@@ -10,14 +10,22 @@
             <dd class="col-sm-9 property">{{ library.user.username }}</dd>
             <dt class="col-sm-3">Last Updated</dt>
             <dd class="col-sm-9 property">{{ library.last_updated_iso }}</dd>
+            <dt class="col-sm-3">Track Count</dt>
+            <dd class="col-sm-9 property">{{ library.count_tracks }}</dd>
+            <dt class="col-sm-3">Artist Count</dt>
+            <dd class="col-sm-9 property">{{ library.count_artists }}</dd>
             <dt class="col-sm-3">Total Duration</dt>
             <dd class="col-sm-9 property">{{ library.total_duration }}</dd>
+            <dt class="col-sm-3">Avg Popularity</dt>
+            <dd class="col-sm-9 property">{{ library.avg_pop }}</dd>
             <dt class="col-sm-3">Top Artists</dt>
             <dd class="col-sm-9">
                 <ul class="list-group">
                 {% for artist, count in library.top_artists.items %}
                     <li class="list-group-flush artist">
+                        <a href="{% url 'artists:single_artist' artist.spotify_id %}">
                             {{ artist.name }} - {{ count }}
+                        </a>
                     </li>
                 {% endfor %}
                 </ul>
