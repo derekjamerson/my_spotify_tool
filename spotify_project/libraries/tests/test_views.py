@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.urls import reverse
 from libraries.factories import LibraryFactory
 from testing import BaseTestCase
@@ -44,8 +46,10 @@ class LibraryStatsTestCase(BaseTestCase):
 
     def test_artists_present(self):
         r = self.client.get(self.url_me)
-        actual_artist_list = self.css_select_get_text(r, 'li.artists a')
-        expected_artist_list = [artist.name for artist in self.library.top_artists]
+        actual_artist_list = self.css_select_get_text(r, 'li.artist a')
+        expected_artist_list = []
+        for artist, count in self.library.top_artists.items():
+            expected_artist_list.append(f'{artist.name} - {count}')
         self.assertEqual(actual_artist_list, expected_artist_list)
 
     def test_link_to_drill_down(self):

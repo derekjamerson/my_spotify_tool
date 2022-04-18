@@ -3,6 +3,7 @@ import uuid
 
 import factory
 from albums.factories import AlbumFactory
+from artists.factories import ArtistFactory
 from tracks.models import Track
 
 
@@ -30,10 +31,12 @@ class TrackFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def artists(self, create, artists):
-        if not create or not artists:
+        if not create:
             return
-
-        self.artists.add(*artists)
+        if not artists:
+            self.artists.add(*ArtistFactory.create_batch(2))
+        else:
+            self.artists.add(*artists)
 
     album = factory.SubFactory(AlbumFactory)
 
