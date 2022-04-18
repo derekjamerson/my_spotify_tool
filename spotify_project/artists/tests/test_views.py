@@ -1,6 +1,7 @@
 from operator import attrgetter
 
 from artists.factories import ArtistFactory
+from django.http import Http404
 from django.urls import reverse
 from libraries.factories import LibraryFactory
 from testing import BaseTestCase
@@ -9,7 +10,12 @@ from users.factories import CustomUserFactory
 
 
 class AllArtistsTestCase(BaseTestCase):
-    url = reverse('artists:my_artists')
+    @property
+    def other_url(self):
+        return reverse('artists:user_artists', kwargs={'user_id': self.other_user.pk})
+
+    all_url = reverse('artists:all_artists')
+    url_me = reverse('artists:my_artists')
 
     def setUp(self):
         super().setUp()
@@ -17,15 +23,26 @@ class AllArtistsTestCase(BaseTestCase):
         self.artist = ArtistFactory()
         self.library = LibraryFactory(user=self.user, artists=[self.artist])
         self.client.force_login(self.user)
+        self.other_user = CustomUserFactory()
+        self.other_library = LibraryFactory(user=self.other_user)
         # not included
         ArtistFactory()
 
-    def test_GET_returns_200(self):
-        r = self.client.get(self.url)
+    def test_GET_return_status_code(self):
+        r = self.client.get(self.other_url)
+        self.assertEqual(r.status_code, 200)
+        r = self.client.get(self.url_me)
+        self.assertEqual(r.status_code, 200)
+        r = self.client.get(self.all_url)
+        self.assertEqual(r.status_code, 200)
+        self.client.logout()
+        r = self.client.get(self.url_me)
+        self.assertRaises(Http404)
+        r = self.client.get(self.all_url)
         self.assertEqual(r.status_code, 200)
 
     def test_artist_name_sorted(self):
-        r = self.client.get(self.url)
+        r = self.client.get(self.url_me)
         actual_names = self.css_select_get_text(r, 'td.artist-name')
         expected_names = list(
             self.library.artists.values_list('name', flat=True).order_by('name')
@@ -33,7 +50,7 @@ class AllArtistsTestCase(BaseTestCase):
         self.assertEqual(actual_names, expected_names)
 
     def test_link_to_drill_down(self):
-        r = self.client.get(self.url)
+        r = self.client.get(self.url_me)
         actual_urls = self.css_select_get_attributes(r, 'td.artist-name a', ['href'])
         expected_urls = [
             {'href': reverse('artists:single_artist', kwargs=dict(artist_id=artist.pk))}
