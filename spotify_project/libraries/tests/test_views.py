@@ -20,9 +20,8 @@ class LibraryStatsTestCase(BaseTestCase):
         self.library = LibraryFactory(user=self.user)
         self.client.force_login(self.user)
         self.other_user = CustomUserFactory()
-        self.other_library = LibraryFactory(user=self.other_user)
-        self.other_library.tracks.clear()
-        self.other_library.artists.clear()
+        self.other_library = LibraryFactory.build(user=self.other_user)
+        self.other_library.save()
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url_other)
