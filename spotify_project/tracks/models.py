@@ -24,6 +24,3 @@ class Track(models.Model):
         if minutes:
             return f'{minutes:02d}:{seconds:02d}'
         return str(seconds)
-
-    def __str__(self):
-        return self.name
