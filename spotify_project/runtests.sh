@@ -1,2 +1,6 @@
 #! /bin/bash
-./manage.py test "$@" -v 2 --noinput
+
+rm -rf .coverage
+coverage run ./manage.py test "$@" -v 2 --noinput &&
+coverage report &&
+echo "Success"

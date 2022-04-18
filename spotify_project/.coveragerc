@@ -4,7 +4,8 @@ branch = True
 omit =
     *tests*.py
     manage.py
-    ./spotify_project/*.py
+    *asgi.py
+    *wsgi.py
 plugins = django_coverage_plugin
 
 [django_coverage_plugin]
@@ -13,3 +14,4 @@ template_extensions = html
 [report]
 show_missing = True
 skip_covered = True
+fail_under = 90
