@@ -6,10 +6,10 @@ from users.factories import CustomUserFactory
 
 class LibraryStatsTestCase(BaseTestCase):
     @property
-    def url_user(self):
+    def url_other(self):
         return reverse(
             'libraries:library_stats',
-            kwargs={'user_id': self.user.spotify_id},
+            kwargs={'user_id': self.other_user.spotify_id},
         )
 
     url_me = reverse('libraries:my_library_stats')
@@ -19,9 +19,13 @@ class LibraryStatsTestCase(BaseTestCase):
         self.user = CustomUserFactory()
         self.library = LibraryFactory(user=self.user)
         self.client.force_login(self.user)
+        self.other_user = CustomUserFactory()
+        self.other_library = LibraryFactory(user=self.other_user)
+        self.other_library.tracks.clear()
+        self.other_library.artists.clear()
 
     def test_GET_returns_200(self):
-        r = self.client.get(self.url_user)
+        r = self.client.get(self.url_other)
         self.assertEqual(r.status_code, 200)
         r = self.client.get(self.url_me)
         self.assertEqual(r.status_code, 200)
@@ -53,3 +57,16 @@ class LibraryStatsTestCase(BaseTestCase):
             for artist in self.library.top_artists
         ]
         self.assertCountEqual(actual_urls, expected_urls)
+
+    def test_no_tracks(self):
+        r = self.client.get(self.url_other)
+        actual_properties = self.css_select_get_text(r, 'dd.property')
+        expected_properties = [
+            self.other_user.username,
+            self.other_library.last_updated_iso,
+            '0',
+            '0',
+            '0',
+            '0',
+        ]
+        self.assertEqual(actual_properties, expected_properties)
