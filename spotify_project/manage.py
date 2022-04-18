@@ -34,7 +34,7 @@ def main():
         cov.stop()
         cov.save()
         covered = cov.report()
-        if covered < 100:
+        if covered < 80:
             sys.exit(1)
 
 
