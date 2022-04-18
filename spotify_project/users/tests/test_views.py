@@ -9,7 +9,7 @@ class UserInfoTestCase(BaseTestCase):
     def url_user(self):
         return reverse(
             'users:user_info',
-            kwargs={'user_id': self.user.spotify_id},
+            kwargs={'user_id': self.other_user.spotify_id},
         )
 
     url_me = reverse('users:my_info')
@@ -19,6 +19,7 @@ class UserInfoTestCase(BaseTestCase):
         self.user = CustomUserFactory()
         self.library = LibraryFactory(user=self.user)
         self.client.force_login(self.user)
+        self.other_user = CustomUserFactory()
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url_user)

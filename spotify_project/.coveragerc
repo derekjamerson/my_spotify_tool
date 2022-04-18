@@ -7,6 +7,9 @@ omit =
     ./spotify_project/*.py
 plugins = django_coverage_plugin
 
+[django_coverage_plugin]
+template_extensions = html
+
 [report]
 show_missing = True
 skip_covered = True

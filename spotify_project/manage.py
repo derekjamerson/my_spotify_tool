@@ -31,6 +31,7 @@ def main():
     execute_from_command_line(sys.argv)
 
     if running_tests:
+        # noinspection PyUnboundLocalVariable
         cov.stop()
         cov.save()
         covered = cov.report()
