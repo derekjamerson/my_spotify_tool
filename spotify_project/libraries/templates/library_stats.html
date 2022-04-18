@@ -11,7 +11,11 @@
 
         <dl class="row properties">
             <dt class="col-sm-3">User</dt>
-            <dd class="col-sm-9 property">{{ library.user.username }}</dd>
+            <dd class="col-sm-9 property">
+              <a href="{% url 'users:user_info' library.user.pk %}">
+                {{ library.user.username }}
+              </a>
+            </dd>
             <dt class="col-sm-3">Last Updated</dt>
             <dd class="col-sm-9 property">{{ library.last_updated_iso }}</dd>
             <dt class="col-sm-3">Track Count</dt>

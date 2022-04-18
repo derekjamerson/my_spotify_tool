@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}User: {{ display_user.name }}{% endblock title %}
+{% block content %}
+    <div class="container">
+        <div class="text-center" style="padding-bottom:65px">
+            <h1>
+            {% if request.user.pk == display_user.pk %}
+                My Info
+            {% else %}
+                User Info
+            {% endif %}
+            </h1>
+        </div>
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9 property">{{ display_user.username }}</dd>
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9 property">{{ display_user.email }}</dd>
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9 property">{{ display_user.spotify_id }}</dd>
+            <dt class="col-sm-3">Library Count</dt>
+            <dd class="col-sm-9 property">
+                <a class="track-count" href="{% url 'libraries:library_stats' display_user.pk %}">
+                    {{ display_user.library.count_tracks }}
+                </a>
+            </dd>
+        </dl>
+    </div>
+{% endblock content %}
