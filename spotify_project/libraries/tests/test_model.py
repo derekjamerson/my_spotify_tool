@@ -23,19 +23,22 @@ class TestLibrary(BaseTestCase):
                 self.assertEqual(count, 3)
 
     def test_duration_string(self):
+        num_tracks = 3
         durations = [
-            randint(1, 59999),
-            randint(60000, 3599999),
-            randint(3600000, 9999999),
-            randint(86401000, 99999999),
+            randint(1, 59999 // num_tracks),
+            randint(60000 // num_tracks, 3599999 // num_tracks),
+            randint(3600000 // num_tracks, 9999999 // num_tracks),
+            randint(86401000 // num_tracks, 99999999 // num_tracks),
         ]
         for actual_ms in durations:
-            self.library.tracks.set(TrackFactory.create_batch(3, duration_ms=actual_ms))
+            self.library.tracks.set(
+                TrackFactory.create_batch(num_tracks, duration_ms=actual_ms)
+            )
             actual_string = self.library.total_duration
-            days = int(actual_ms * 3 / (1000 * 60 * 60 * 24))
-            hours = int(actual_ms * 3 / (1000 * 60 * 60)) % 24
-            minutes = int(actual_ms * 3 / (1000 * 60)) % 60
-            seconds = int(actual_ms * 3 / 1000) % 60
+            days = int(actual_ms * num_tracks / (1000 * 60 * 60 * 24))
+            hours = int(actual_ms * num_tracks / (1000 * 60 * 60)) % 24
+            minutes = int(actual_ms * num_tracks / (1000 * 60)) % 60
+            seconds = int(actual_ms * num_tracks / 1000) % 60
             if days:
                 expected_string = f'{days:03d}:{hours:02d}:{minutes:02d}:{seconds:02d}'
             elif hours:
