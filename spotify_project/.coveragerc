@@ -1,0 +1,12 @@
+[run]
+source = .
+branch = True
+omit =
+    *tests*.py
+    manage.py
+    ./spotify_project/*.py
+plugins = django_coverage_plugin
+
+[report]
+show_missing = True
+skip_covered = True
