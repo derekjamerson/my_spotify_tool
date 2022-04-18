@@ -35,7 +35,10 @@ def main():
         cov.save()
         covered = cov.report()
         if covered < 80:
+            print('Coverage Failure')
             sys.exit(1)
+        else:
+            print('Success')
 
 
 if __name__ == "__main__":
