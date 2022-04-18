@@ -6,6 +6,7 @@ from testing import BaseTestCase
 
 class AlbumUtilsTestCase(BaseTestCase):
     def setUp(self):
+        super().setUp()
         self.artist_utils = ArtistUtils()
         self.artist = ArtistFactory()
         # not included

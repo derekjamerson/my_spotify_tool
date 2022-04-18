@@ -6,6 +6,7 @@ from tracks.factories import TrackFactory
 
 class TestTrack(BaseTestCase):
     def setUp(self):
+        super().setUp()
         self.track = TrackFactory()
 
     def test_duration_string(self):

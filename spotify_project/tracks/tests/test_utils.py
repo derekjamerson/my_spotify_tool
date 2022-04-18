@@ -9,6 +9,7 @@ from tracks.utils import TrackUtils
 
 class TrackUtilsTestCase(BaseTestCase):
     def setUp(self):
+        super().setUp()
         self.track_utils = TrackUtils()
         self.artists = [ArtistFactory()]
         self.track = TrackFactory(artists=self.artists)

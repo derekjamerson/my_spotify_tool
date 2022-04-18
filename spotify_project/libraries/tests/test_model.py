@@ -8,6 +8,7 @@ from tracks.factories import TrackFactory
 
 class TestLibrary(BaseTestCase):
     def setUp(self):
+        super().setUp()
         self.artists = ArtistFactory.create_batch(11)
         self.tracks = TrackFactory.create_batch(3, artists=self.artists)
         self.tracks += TrackFactory.create_batch(3, artists=[self.artists[0]])
