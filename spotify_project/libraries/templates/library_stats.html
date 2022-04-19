@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load date_utils %}
 {% block title %}Library: {{ library.user.username }}{% endblock title %}
 {% block content %}
     <div class="container">
@@ -17,17 +18,17 @@
               </a>
             </dd>
             <dt class="col-sm-3">Last Updated</dt>
-            <dd class="col-sm-9 property">{{ library.last_updated_iso }}</dd>
+            <dd class="col-sm-9 property">{{ library.last_updated|date:"F j, Y H:i:s" }}</dd>
             <dt class="col-sm-3">Track Count</dt>
-            <dd class="col-sm-9 property">{{ library.count_tracks }}</dd>
+            <dd class="col-sm-9 property">{{ library.tracks.count }}</dd>
             <dt class="col-sm-3">Artist Count</dt>
             <dd class="col-sm-9 property">
                 <a href="{% url 'artists:my_artists' %}">
-                    {{ library.count_artists }}
+                    {{ library.artists.count }}
                 </a>
             </dd>
             <dt class="col-sm-3">Total Duration</dt>
-            <dd class="col-sm-9 property">{{ library.total_duration }}</dd>
+            <dd class="col-sm-9 property">{% display_timedelta library.total_duration %}</dd>
             <dt class="col-sm-3">Avg Popularity</dt>
             <dd class="col-sm-9 property">{{ library.avg_pop }}</dd>
             <dt class="col-sm-3">Top Artists</dt>

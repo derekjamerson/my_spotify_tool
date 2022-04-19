@@ -1,8 +1,10 @@
 from collections import defaultdict
+from datetime import timedelta
 from operator import itemgetter
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Library(models.Model):
@@ -16,13 +18,6 @@ class Library(models.Model):
     )
     artists = models.ManyToManyField('artists.Artist', related_name='libraries')
     last_updated = models.DateTimeField(auto_now_add=True, blank=True)
-
-    @property
-    def last_updated_iso(self):
-        # noinspection PyUnresolvedReferences
-        updated_tz = self.last_updated.astimezone(None)
-        time_string = updated_tz.isoformat(sep=' ', timespec='seconds')
-        return time_string[:19]
 
     @property
     def top_artists(self):
@@ -40,25 +35,7 @@ class Library(models.Model):
         result = 0
         for track in self.tracks.all():
             result += int(track.duration_ms)
-        seconds, milliseconds = divmod(result, 1000)
-        minutes, seconds = divmod(seconds, 60)
-        hours, minutes = divmod(minutes, 60)
-        days, hours = divmod(hours, 24)
-        if days:
-            return f'{days:03d}:{hours:02d}:{minutes:02d}:{seconds:02d}'
-        if hours:
-            return f'{hours:02d}:{minutes:02d}:{seconds:02d}'
-        if minutes:
-            return f'{minutes:02d}:{seconds:02d}'
-        return str(seconds)
-
-    @property
-    def count_tracks(self):
-        return len(self.tracks.all())
-
-    @property
-    def count_artists(self):
-        return len(self.artists.all())
+        return timedelta(milliseconds=result)
 
     @property
     def avg_pop(self):
@@ -66,6 +43,6 @@ class Library(models.Model):
         for track in self.tracks.all():
             total_pop += int(track.popularity)
         try:
-            return round(total_pop / self.count_tracks, 2)
+            return round(total_pop / self.tracks.count(), 2)
         except ZeroDivisionError:
             return 0
