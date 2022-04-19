@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 
 
@@ -13,14 +15,9 @@ class Track(models.Model):
     is_explicit = models.BooleanField(default=False)
     popularity = models.CharField(max_length=3)
 
-    @property
-    def duration_string(self):
-        # noinspection PyTypeChecker
-        seconds, milliseconds = divmod(int(self.duration_ms), 1000)
-        minutes, seconds = divmod(seconds, 60)
-        hours, minutes = divmod(minutes, 60)
-        if hours:
-            return f'{hours:02d}:{minutes:02d}:{seconds:02d}'
-        if minutes:
-            return f'{minutes:02d}:{seconds:02d}'
-        return str(seconds)
+    
+    def duration(self):
+        return timedelta(milliseconds=int(self.duration_ms))
+
+    def __str__(self):
+        return self.name

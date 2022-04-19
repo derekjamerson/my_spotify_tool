@@ -31,12 +31,13 @@ class LibraryStatsTestCase(BaseTestCase):
         r = self.client.get(self.url_me)
         self.assertEqual(r.status_code, 200)
 
+    # TODO label properties individually
     def test_properties_present(self):
         r = self.client.get(self.url_me)
         actual_properties = self.css_select_get_text(r, 'dd.property')
         expected_properties = [
             self.user.username,
-            self.library.last_updated_iso,
+            self.library.last_updated.astimezone(None).strftime('%B %d, %Y %H:%M:%S'),
             str(self.library.count_tracks),
             str(self.library.count_artists),
             self.library.total_duration,

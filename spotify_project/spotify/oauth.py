@@ -5,6 +5,7 @@ from urllib import parse
 from urllib.parse import urlencode
 
 import requests
+from django.conf import settings
 
 
 class OAuth:
@@ -18,8 +19,8 @@ class OAuth:
 
     def create_auth_url(self):
         payload = {
-            'client_id': os.getenv('SPOTIFY_CLIENT_ID'),
-            'redirect_uri': os.getenv('REDIRECT_URI'),
+            'client_id': settings.SPOTIFY_CLIENT_ID,
+            'redirect_uri': settings.REDIRECT_URI,
             'scope': ' '.join(self.scope),
             'response_type': 'code',
         }
@@ -27,9 +28,7 @@ class OAuth:
         return auth_url
 
     def get_token_json(self, auth_response):
-        auth_string = (
-            os.getenv('SPOTIFY_CLIENT_ID') + ':' + os.getenv('SPOTIFY_CLIENT_SECRET')
-        )
+        auth_string = settings.SPOTIFY_CLIENT_ID + ':' + settings.SPOTIFY_CLIENT_SECRET
         auth_head = base64.b64encode(auth_string.encode('ascii')).decode('ascii')
         headers = {
             'Authorization': 'Basic ' + auth_head,
@@ -37,7 +36,7 @@ class OAuth:
         }
         body = {
             'code': auth_response.GET['code'],
-            'redirect_uri': os.getenv('REDIRECT_URI'),
+            'redirect_uri': settings.REDIRECT_URI,
             'grant_type': 'authorization_code',
         }
         response_json = requests.post(
