@@ -6,6 +6,7 @@ from users.factories import CustomUserFactory
 
 class LibraryUtilsTestCase(BaseTestCase):
     def setUp(self):
+        super().setUp()
         self.library_utils = LibraryUtils()
         self.user = CustomUserFactory()
         self.library = LibraryFactory(user=self.user)

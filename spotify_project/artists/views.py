@@ -15,7 +15,7 @@ def get_source_all_artists(*, user, user_id, mine):
         return Artist.objects.all(), None
     if mine:
         raise Http404()
-    return Artist.objects.all()
+    return Artist.objects.all(), None
 
 
 def all_artists(request, user_id=None, mine=False):

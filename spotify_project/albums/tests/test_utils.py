@@ -9,6 +9,7 @@ from testing import BaseTestCase
 
 class AlbumUtilsTestCase(BaseTestCase):
     def setUp(self):
+        super().setUp()
         self.album_utils = AlbumUtils()
         self.artist = ArtistFactory()
         self.album = AlbumFactory(artists=[self.artist])

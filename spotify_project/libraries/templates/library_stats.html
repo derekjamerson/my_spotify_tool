@@ -12,28 +12,34 @@
 
         <dl class="row properties">
             <dt class="col-sm-3">User</dt>
-            <dd class="col-sm-9 property">
+            <dd class="col-sm-9" id="user-name">
               <a href="{% url 'users:user_info' library.user.pk %}">
                 {{ library.user.username }}
               </a>
             </dd>
             <dt class="col-sm-3">Last Updated</dt>
-            <dd class="col-sm-9 property">{{ library.last_updated|date:"F j, Y H:i:s" }}</dd>
+            <dd class="col-sm-9" id="last-updated">
+            {% if library.tracks.exists %}
+                {{ library.last_updated|date:"F j, Y H:i:s" }}
+            {% else %}
+                Never
+            {% endif %}
+            </dd>
             <dt class="col-sm-3">Track Count</dt>
-            <dd class="col-sm-9 property">{{ library.tracks.count }}</dd>
+            <dd class="col-sm-9" id="track-count">{{ library.tracks.count }}</dd>
             <dt class="col-sm-3">Artist Count</dt>
-            <dd class="col-sm-9 property">
+            <dd class="col-sm-9" id="artist-count">
                 <a href="{% url 'artists:my_artists' %}">
                     {{ library.artists.count }}
                 </a>
             </dd>
             <dt class="col-sm-3">Total Duration</dt>
-            <dd class="col-sm-9 property">{% display_timedelta library.total_duration %}</dd>
+            <dd class="col-sm-9" id="total-duration">{% display_timedelta library.total_duration %}</dd>
             <dt class="col-sm-3">Avg Popularity</dt>
-            <dd class="col-sm-9 property">{{ library.avg_pop }}</dd>
+            <dd class="col-sm-9" id="avg-pop">{{ library.avg_pop }}</dd>
             <dt class="col-sm-3">Top Artists</dt>
             <dd class="col-sm-9">
-                <ul class="list-group">
+                <ul class="list-group" id="top-artists">
                 {% if library.tracks.exists %}
                 {% for artist, count in library.top_artists.items %}
                     <li class="list-group-flush artist">

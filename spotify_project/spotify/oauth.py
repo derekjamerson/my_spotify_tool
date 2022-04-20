@@ -1,5 +1,4 @@
 import base64
-import os
 import urllib
 from urllib import parse
 from urllib.parse import urlencode

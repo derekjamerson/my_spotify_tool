@@ -4,7 +4,6 @@ from operator import itemgetter
 
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
 
 
 class Library(models.Model):
@@ -43,6 +42,7 @@ class Library(models.Model):
         for track in self.tracks.all():
             total_pop += int(track.popularity)
         try:
+            # noinspection PyUnresolvedReferences
             return round(total_pop / self.tracks.count(), 2)
         except ZeroDivisionError:
             return 0

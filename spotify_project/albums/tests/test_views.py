@@ -1,5 +1,3 @@
-from operator import attrgetter
-
 from albums.factories import AlbumFactory
 from artists.factories import ArtistFactory
 from django.urls import reverse
@@ -25,33 +23,43 @@ class AlbumInfoTestCase(BaseTestCase):
         r = self.client.get(self.url)
         self.assertEqual(r.status_code, 200)
 
-    def test_properties_present(self):
+    def test_album_name_present(self):
         r = self.client.get(self.url)
-        actual_properties = self.css_select_get_text(r, 'dd.property')
-        expected_properties = [
-            self.album.name,
-            self.album.spotify_id,
-            self.album.release_date,
-        ]
-        self.assertEqual(actual_properties, expected_properties)
+        actual = self.css_select_get_text(r, 'dl.properties dd#album-name')[0]
+        expected = self.album.name
+        self.assertEqual(actual, expected)
+
+    def test_album_id_present(self):
+        r = self.client.get(self.url)
+        actual = self.css_select_get_text(r, 'dl.properties dd#album-id')[0]
+        expected = self.album.pk
+        self.assertEqual(actual, expected)
+
+    def test_album_release_date_present(self):
+        r = self.client.get(self.url)
+        actual = self.css_select_get_text(r, 'dl.properties dd#release-date')[0]
+        expected = self.album.release_date
+        self.assertEqual(actual, expected)
 
     def test_artists_present(self):
         r = self.client.get(self.url)
-        actual_artist_list = self.css_select_get_text(r, 'li.artists a')
+        actual_artist_list = self.css_select_get_text(r, 'dd#artists li.artist-name')
         expected_artist_list = [artist.name for artist in self.album.artists.all()]
         expected_artist_list.sort()
         self.assertEqual(actual_artist_list, expected_artist_list)
 
     def test_tracks_present(self):
         r = self.client.get(self.url)
-        actual_track_list = self.css_select_get_text(r, 'li.tracks a')
+        actual_track_list = self.css_select_get_text(r, 'dd#tracks li.track-name')
         expected_track_list = [track.name for track in self.album.tracks.all()]
         expected_track_list.sort()
         self.assertEqual(actual_track_list, expected_track_list)
 
     def test_link_to_artist_drill_down(self):
         r = self.client.get(self.url)
-        actual_urls = self.css_select_get_attributes(r, 'li.artists a', ['href'])
+        actual_urls = self.css_select_get_attributes(
+            r, 'dd#artists li.artist-name a', ['href']
+        )
         expected_urls = [
             {'href': reverse('artists:single_artist', kwargs=dict(artist_id=artist.pk))}
             for artist in self.album.artists.all()
@@ -60,7 +68,9 @@ class AlbumInfoTestCase(BaseTestCase):
 
     def test_link_to_track_drill_down(self):
         r = self.client.get(self.url)
-        actual_urls = self.css_select_get_attributes(r, 'li.tracks a', ['href'])
+        actual_urls = self.css_select_get_attributes(
+            r, 'dd#tracks li.track-name a', ['href']
+        )
         expected_urls = [
             {'href': reverse('tracks:track_info', kwargs=dict(track_id=track.pk))}
             for track in self.album.tracks.all()

@@ -6,14 +6,14 @@
         <div class="text-center" style="padding-bottom:65px">
             <h1>Track Info</h1>
         </div>
-        <dl class="row">
+        <dl class="row properties">
             <dt class="col-sm-3">Title</dt>
-            <dd class="col-sm-9 property">{{ track.name }}</dd>
+            <dd class="col-sm-9" id="track-name">{{ track.name }}</dd>
             <dt class="col-sm-3">Artists</dt>
             <dd class="col-sm-9">
-                <ul class="list-group">
-                {% for artist in track.artists.all|dictsort:"spotify_id" %}
-                    <li class="list-group-flush artists">
+                <ul class="list-group" id="artists">
+                {% for artist in track.artists.all|dictsort:"name" %}
+                    <li class="list-group-flush artist">
                         <a href="{% url 'artists:single_artist' artist.spotify_id %}">
                             {{ artist.name }}
                         </a>
@@ -22,19 +22,19 @@
                 </ul>
             </dd>
             <dt class="col-sm-3">Album</dt>
-            <dd class="col-sm-9 property">
+            <dd class="col-sm-9" id="track-album">
                 <a href="{% url 'albums:album_info' track.album.spotify_id %}">
                     {{ track.album }}
                 </a>
             </dd>
             <dt class="col-sm-3">ID</dt>
-            <dd class="col-sm-9 property">{{ track.spotify_id }}</dd>
+            <dd class="col-sm-9" id="track-id">{{ track.spotify_id }}</dd>
             <dt class="col-sm-3">Duration</dt>
-            <dd class="col-sm-9 property">{% display_timedelta_only_mins track.duration %}</dd>
+            <dd class="col-sm-9" id="duration">{% display_timedelta_only_mins track.duration %}</dd>
             <dt class="col-sm-3">Explicit</dt>
-            <dd class="col-sm-9 property">{{ track.is_explicit|yesno:"Yes,No" }}</dd>
+            <dd class="col-sm-9" id="explicit">{{ track.is_explicit|yesno:"Yes,No" }}</dd>
             <dt class="col-sm-3">Popularity</dt>
-            <dd class="col-sm-9 property">{{ track.popularity }}</dd>
+            <dd class="col-sm-9" id="popularity">{{ track.popularity }}</dd>
         </dl>
     </div>
 {% endblock content %}
