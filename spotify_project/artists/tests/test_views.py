@@ -1,7 +1,6 @@
 from operator import attrgetter
 
 from artists.factories import ArtistFactory
-from django.http import Http404
 from django.urls import reverse
 from libraries.factories import LibraryFactory
 from testing import BaseTestCase
@@ -10,11 +9,11 @@ from users.factories import CustomUserFactory
 
 
 class AllArtistsTestCase(BaseTestCase):
-    @property
-    def other_url(self):
-        return reverse('artists:user_artists', kwargs={'user_id': self.other_user.pk})
+    @staticmethod
+    def get_url_user(user):
+        return reverse('artists:user_artists', kwargs={'user_id': user.pk})
 
-    all_url = reverse('artists:all_artists')
+    url_all = reverse('artists:all_artists')
     url_me = reverse('artists:my_artists')
 
     def setUp(self):
@@ -28,17 +27,22 @@ class AllArtistsTestCase(BaseTestCase):
         # not included
         ArtistFactory()
 
-    def test_GET_return_status_code(self):
-        r = self.client.get(self.other_url)
-        self.assertEqual(r.status_code, 200)
+    def test_GET_return_status_code_me(self):
         r = self.client.get(self.url_me)
-        self.assertEqual(r.status_code, 200)
-        r = self.client.get(self.all_url)
         self.assertEqual(r.status_code, 200)
         self.client.logout()
         r = self.client.get(self.url_me)
-        self.assertRaises(Http404)
-        r = self.client.get(self.all_url)
+        self.assertEqual(r.status_code, 404)
+
+    def test_GET_return_status_code_user(self):
+        r = self.client.get(self.get_url_user(self.other_user))
+        self.assertEqual(r.status_code, 200)
+
+    def test_GET_return_status_code_all(self):
+        r = self.client.get(self.url_all)
+        self.assertEqual(r.status_code, 200)
+        self.client.logout()
+        r = self.client.get(self.url_all)
         self.assertEqual(r.status_code, 200)
 
     def test_artist_name_sorted(self):

@@ -11,17 +11,17 @@
             {% endif %}
             </h1>
         </div>
-        <dl class="row">
+        <dl class="row properties">
             <dt class="col-sm-3">Name</dt>
-            <dd class="col-sm-9 property">{{ display_user.username }}</dd>
+            <dd class="col-sm-9 property" id="username">{{ display_user.username }}</dd>
             <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9 property">{{ display_user.email }}</dd>
+            <dd class="col-sm-9" id="email">{{ display_user.email }}</dd>
             <dt class="col-sm-3">ID</dt>
-            <dd class="col-sm-9 property">{{ display_user.spotify_id }}</dd>
+            <dd class="col-sm-9" id="user-id">{{ display_user.spotify_id }}</dd>
             <dt class="col-sm-3">Library Count</dt>
-            <dd class="col-sm-9 property">
+            <dd class="col-sm-9" id="track-count">
                 <a class="track-count" href="{% url 'libraries:library_stats' display_user.pk %}">
-                    {{ display_user.library.count_tracks }}
+                    {{ display_user.library.tracks.count }}
                 </a>
             </dd>
         </dl>

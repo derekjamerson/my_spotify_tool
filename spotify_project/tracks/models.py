@@ -15,9 +15,7 @@ class Track(models.Model):
     is_explicit = models.BooleanField(default=False)
     popularity = models.CharField(max_length=3)
 
-    
+    @property
     def duration(self):
+        # noinspection PyTypeChecker
         return timedelta(milliseconds=int(self.duration_ms))
-
-    def __str__(self):
-        return self.name

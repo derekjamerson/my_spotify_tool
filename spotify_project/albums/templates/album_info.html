@@ -5,14 +5,14 @@
         <div class="text-center" style="padding-bottom:65px">
             <h1>Album Info</h1>
         </div>
-        <dl class="row">
+        <dl class="row properties">
             <dt class="col-sm-3">Title</dt>
-            <dd class="col-sm-9 property">{{ album.name }}</dd>
+            <dd class="col-sm-9" id="album-name">{{ album.name }}</dd>
             <dt class="col-sm-3">Artists</dt>
-            <dd class="col-sm-9">
+            <dd class="col-sm-9" id="artists">
                 <ul class="list-group">
                 {% for artist in album.artists.all|dictsort:"name" %}
-                    <li class="list-group-flush artists">
+                    <li class="list-group-flush artist-name">
                         <a href="{% url 'artists:single_artist' artist.spotify_id %}">
                             {{ artist.name }}
                         </a>
@@ -21,10 +21,10 @@
                 </ul>
             </dd>
             <dt class="col-sm-3">Tracks</dt>
-            <dd class="col-sm-9">
+            <dd class="col-sm-9" id="tracks">
                 <ul class="list-group">
                 {% for track in album.tracks.all|dictsort:"name" %}
-                    <li class="list-group-flush tracks">
+                    <li class="list-group-flush track-name">
                         <a href="{% url 'tracks:track_info' track.spotify_id %}">
                             {{ track.name }}
                         </a>
@@ -33,9 +33,9 @@
                 </ul>
             </dd>
             <dt class="col-sm-3">ID</dt>
-            <dd class="col-sm-9 property">{{ album.spotify_id }}</dd>
+            <dd class="col-sm-9" id="album-id">{{ album.spotify_id }}</dd>
             <dt class="col-sm-3">Release Date</dt>
-            <dd class="col-sm-9 property">{{ album.release_date }}</dd>
+            <dd class="col-sm-9" id="release-date">{{ album.release_date }}</dd>
         </dl>
     </div>
 {% endblock content %}
