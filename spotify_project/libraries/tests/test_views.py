@@ -60,7 +60,9 @@ class LibraryStatsTestCase(BaseTestCase):
         actual = self.css_select_get_text(r, 'dl.properties dd#total-duration')[0]
         hours, remainder = divmod(self.library.total_duration.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
-        expected = f'{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}'
+        expected = (
+            f'{str(hours).zfill(2)}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}'
+        )
         self.assertEqual(actual, expected)
 
     def test_avg_pop_present(self):
@@ -109,7 +111,7 @@ class LibraryStatsTestCase(BaseTestCase):
     def test_total_duration_empty(self):
         r = self.client.get(self.url_other)
         actual = self.css_select_get_text(r, 'dl.properties dd#total-duration')[0]
-        expected = '0:00:00'
+        expected = '00:00:00'
         self.assertEqual(actual, expected)
 
     def test_avg_pop_empty(self):
