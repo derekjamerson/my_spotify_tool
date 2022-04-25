@@ -27,7 +27,9 @@ class OAuth:
         return auth_url
 
     def get_token_json(self, auth_response):
-        auth_string = settings.SPOTIFY_CLIENT_ID + ':' + settings.SPOTIFY_CLIENT_SECRET
+        auth_string = (
+            str(settings.SPOTIFY_CLIENT_ID) + ':' + str(settings.SPOTIFY_CLIENT_SECRET)
+        )
         auth_head = base64.b64encode(auth_string.encode('ascii')).decode('ascii')
         headers = {
             'Authorization': 'Basic ' + auth_head,
