@@ -2,7 +2,6 @@ import json
 from unittest.mock import Mock, patch
 
 import requests
-import responses
 from spotify.oauth import OAuth
 from testing import BaseTestCase
 
