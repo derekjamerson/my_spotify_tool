@@ -12,9 +12,7 @@ class DateUtilsTestCase(BaseTestCase):
         self.tdelta = timedelta(seconds=self.input_seconds)
 
     def test_time_with_days(self):
-        r = display_timedelta(self.tdelta)
-        days = self.tdelta.days
-        hours, remain_from_hours = divmod(self.tdelta.seconds, 3600)
-        minutes, seconds = divmod(remain_from_hours, 60)
-        expected = f'{days} days, {str(hours).zfill(2)}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}'
+        test_delta = timedelta(seconds=10000000)
+        r = display_timedelta(test_delta)
+        expected = '115 days, 17:46:40'
         self.assertEqual(r, expected)
