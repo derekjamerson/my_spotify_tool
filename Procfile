@@ -1,1 +1,1 @@
-web: gunicorn spotify_project.spotify_project.wsgi
+web: gunicorn spotify_project.wsgi
