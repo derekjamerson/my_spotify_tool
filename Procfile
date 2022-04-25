@@ -1,1 +1,1 @@
-web: ./manage.py runserver
+web: gunicorn spotify_project.spotify_project.wsgi
