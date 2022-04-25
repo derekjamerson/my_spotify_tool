@@ -7,6 +7,7 @@ from libraries.utils import LibraryUtils
 from tracks.utils import TrackUtils
 
 
+# TODO test this. come up with data.
 class Spotify:
     def __init__(self, token):
         self.token = token

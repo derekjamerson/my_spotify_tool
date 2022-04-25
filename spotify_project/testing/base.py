@@ -71,3 +71,10 @@ class BaseTestCase(TestCase):
         if add_tracks:
             for track in set(tracks_to_be_added):
                 track.save()
+
+
+class MockResponse:
+    def __init__(self, GET=None):
+        if not GET:
+            GET = {}
+        self.GET = GET

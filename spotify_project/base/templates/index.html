@@ -5,8 +5,11 @@
         <h1>Welcome</h1>
     </div>
     <div class="row justify-content-center" style="padding-top: 65px">
-        <button type="button" class="btn btn-primary col-2 text-center" onclick="document.location='{% url 'base:login' %}'">
-            Login
-        </button>
+        <form class="form" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary col-2 text-center">
+                Login
+            </button>
+        </form>
     </div>
 {% endblock content %}
