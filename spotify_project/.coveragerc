@@ -6,6 +6,7 @@ omit =
     manage.py
     *asgi.py
     *wsgi.py
+    ./spotify/base.py
 plugins = django_coverage_plugin
 
 [django_coverage_plugin]
