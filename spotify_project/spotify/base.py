@@ -27,6 +27,7 @@ class Spotify:
         }
         return requests.get(url, headers=headers, params=urlencode(body)).json()
 
+    # TODO delete this
     @property
     def tracks(self):
         library_url = 'https://api.spotify.com/v1/me/tracks'
