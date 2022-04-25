@@ -37,3 +37,4 @@ virtualenv==20.14.1
 yarg==0.1.9
 
 Faker~=13.3.4
+responses~=0.20.0
