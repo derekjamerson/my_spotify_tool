@@ -21,7 +21,6 @@ def spotify_login(request):
     return redirect(auth_url)
 
 
-@require_POST
 def spotify_callback(request):
     oauth = OAuth()
     request.session['token_response'] = oauth.get_token_json(request)
