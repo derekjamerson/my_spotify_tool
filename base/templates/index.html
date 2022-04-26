@@ -6,7 +6,7 @@
     </div>
     <form action="{% url 'base:login' %}" class="form" method="POST">
         <div class="row justify-content-center" style="padding-top: 65px">
-            {% csrf_token %}
+        {% csrf_token %}
             <button type="submit" class="btn btn-primary col-2 text-center">
                 Login
             </button>

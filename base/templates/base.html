@@ -13,6 +13,7 @@
                 <a class="navbar-brand" href="{% url 'libraries:my_library_stats' %}">MySpotifyTool</a>
                 <div class="nav nav-pills nav-fill ms-auto">
                     <form action="{% url 'base:logout' %}" class="form" method="POST">
+                    {% csrf_token %}
                         <button type="submit">Logout</button>
                     </form>
                 </div>
