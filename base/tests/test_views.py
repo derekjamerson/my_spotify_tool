@@ -31,8 +31,8 @@ class SpotifyLoginTestCase(BaseTestCase):
         super().setUp()
         self.url = reverse('base:login')
 
-    def test_GET_returns_302(self):
-        r = self.client.get(self.url)
+    def test_POST_returns_302(self):
+        r = self.client.post(self.url)
         self.assertEqual(r.status_code, 302)
 
 
@@ -52,14 +52,14 @@ class SpotifyCallbackTestCase(BaseTestCase):
         }
         with patch('spotify.oauth.OAuth.get_token_json', return_value=return_val):
             with patch('spotify.Spotify.fetch_current_user', return_value=user_dict):
-                r = self.client.get(self.url)
+                r = self.client.post(self.url)
         self.assertRedirects(r, reverse('libraries:my_library_stats'))
 
     def test_redirect_login_fail(self):
         return_val = {'access_token': 'dummy_access_token'}
         with patch('spotify.oauth.OAuth.get_token_json', return_value=return_val):
             with patch('backends.base.AuthBackend.authenticate', return_value=None):
-                r = self.client.get(self.url)
+                r = self.client.post(self.url)
         self.assertRedirects(r, reverse('base:index'))
 
 
@@ -69,7 +69,7 @@ class LogoutViewTestCase(BaseTestCase):
         self.url = reverse('base:logout')
 
     def test_redirect_page(self):
-        r = self.client.get(self.url)
+        r = self.client.post(self.url)
         self.assertRedirects(r, reverse('base:index'))
 
 
@@ -83,5 +83,5 @@ class PullDataTestCase(BaseTestCase):
         session['token_response'] = {'access_token': 'dummy_access_token'}
         session.save()
         with patch('spotify.Spotify.pull_library_data', return_value=None):
-            r = self.client.get(self.url)
+            r = self.client.post(self.url)
         self.assertRedirects(r, reverse('base:index'))

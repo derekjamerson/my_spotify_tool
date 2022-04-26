@@ -1,7 +1,4 @@
-import json
 from unittest.mock import Mock, patch
-
-import requests
 
 from spotify.oauth import OAuth
 from testing import BaseTestCase
@@ -17,6 +14,7 @@ class OAuthTestCase(BaseTestCase):
     def test_get_token_json(self):
         expected = {'item': 'dummy_data'}
 
+        # noinspection PyUnusedLocal
         def mock_json(*args, **kwargs):
             return expected
 

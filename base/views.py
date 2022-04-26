@@ -13,7 +13,6 @@ def index(request):
     return render(request, 'index.html')
 
 
-# TODO should be POST
 # noinspection PyUnusedLocal
 @require_POST
 def spotify_login(request):
@@ -22,7 +21,6 @@ def spotify_login(request):
     return redirect(auth_url)
 
 
-# TODO should be POST
 @require_POST
 def spotify_callback(request):
     oauth = OAuth()
@@ -35,14 +33,12 @@ def spotify_callback(request):
     return redirect(reverse('base:index'))
 
 
-# TODO should be POST
 @require_POST
 def logout_view(request):
     logout(request)
     return redirect(reverse('base:index'))
 
 
-# TODO should be POST
 @require_POST
 def pull_data(request):
     access_token = request.session['token_response']['access_token']

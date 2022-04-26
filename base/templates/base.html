@@ -9,14 +9,16 @@
     <body>
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                {% if user.is_authenticated %}
-                    <a class="navbar-brand" href="{% url 'libraries:my_library_stats' %}">MySpotifyTool</a>
-                    <div class="nav nav-pills nav-fill ms-auto">
-                        <a class="nav-link active" href="{% url 'base:logout' %}">Logout</a>
-                    </div>
-                {% else %}
-                    <a class="navbar-brand" href="{% url 'base:index' %}">MySpotifyTool</a>
-                {% endif %}
+            {% if user.is_authenticated %}
+                <a class="navbar-brand" href="{% url 'libraries:my_library_stats' %}">MySpotifyTool</a>
+                <div class="nav nav-pills nav-fill ms-auto">
+                    <form action="{% url 'base:logout' %}" class="form" method="POST">
+                        <button type="submit">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <a class="navbar-brand" href="{% url 'base:index' %}">MySpotifyTool</a>
+            {% endif %}
             </div>
         </nav>
         <div class="container" style="padding-top: 65px">

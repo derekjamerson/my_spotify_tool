@@ -4,12 +4,12 @@
     <div class="text-center">
         <h1>Welcome</h1>
     </div>
-    <div class="row justify-content-center" style="padding-top: 65px">
-        <form class="form" method="POST">
+    <form action="{% url 'base:login' %}" class="form" method="POST">
+        <div class="row justify-content-center" style="padding-top: 65px">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary col-2 text-center">
                 Login
             </button>
-        </form>
-    </div>
+        </div>
+    </form>
 {% endblock content %}
