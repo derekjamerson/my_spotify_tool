@@ -10,6 +10,7 @@ click==8.1.2
 coverage==6.3.2
 cryptography==36.0.2
 distlib==0.3.4
+dj-database-url
 Django==4.0.4
 django-coverage-plugin==2.0.2
 django-extensions==3.1.5
