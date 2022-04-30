@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load date_utils %}
+{% load diff_utils %}
+{% block title %}Compare Library Stats{% endblock title %}
+{% block content %}
+  <div class="container">
+    <div class="text-center" style="padding-bottom:35px">
+      <h1 style="padding-bottom:35px">Compare Library Stats</h1>
+      <div>
+<!--TODO form passes '?user_id=USERID'-->
+        <form action="/libraries/compare_stats/" class="form" method="GET">
+          <select name="user_id">
+            {% for user in users %}
+            <option value="{{ user.pk }}">{{ user.username }}</option>
+            {% endfor %}
+          </select>
+          <input type="submit" value="Go">
+        </form>
+      </div>
+    </div>
+    {% if their_library %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">{{ my_library.user.username }}</th>
+          <th scope="col">Difference</th>
+          <th scope="col">{{ their_library.user.username }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Track Count</th>
+          <td>{{ my_library.tracks.count }}</td>
+          <td>{% calc_diff their_library.tracks.count my_library.tracks.count %}</td>
+          <td>{{ their_library.tracks.count }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Artist Count</th>
+          <td>{{ my_library.artists.count }}</td>
+          <td>{% calc_diff their_library.artists.count my_library.artists.count %}</td>
+          <td>{{ their_library.artists.count }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Total Duration</th>
+          <td>{% display_timedelta my_library.total_duration %}</td>
+          {% calc_diff my_library.total_duration their_library.total_duration as duration_diff %}
+          <td>
+            {% if my_library.total_duration > their_library.total_duration %}-{% endif %}
+            {% display_timedelta duration_diff %}
+          </td>
+          <td>{% display_timedelta their_library.total_duration %}</td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+{% endblock content %}

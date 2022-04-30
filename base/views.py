@@ -8,9 +8,10 @@ from spotify.oauth import OAuth
 
 
 def index(request):
+    print(request.resolver_match.namespace)
     if request.user.is_authenticated:
         return redirect(reverse('libraries:my_library_stats'))
-    return render(request, 'index.html')
+    return render(request, 'index.html', {})
 
 
 # noinspection PyUnusedLocal
