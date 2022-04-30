@@ -18,7 +18,10 @@
                     </form>
                 </div>
             {% else %}
-                <a class="navbar-brand" href="{% url 'base:index' %}">MySpotifyTool</a>
+                {% comment %}
+                TODO broken for some reason. should use url with reverse
+                {% endcomment %}
+                <a class="navbar-brand" href="/">MySpotifyTool</a>
             {% endif %}
             </div>
         </nav>
