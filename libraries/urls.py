@@ -12,4 +12,9 @@ urlpatterns = [
         name='my_library_stats',
         kwargs={'user_id': None},
     ),
+    path(
+        r'compare_stats/',
+        views.compare_stats,
+        name='compare_stats',
+    ),
 ]

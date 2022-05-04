@@ -2,8 +2,6 @@ import factory
 
 from artists.factories import ArtistFactory
 from libraries.models import Library
-
-# noinspection PyMethodParameters
 from tracks.factories import TrackFactory
 from users.factories import CustomUserFactory
 

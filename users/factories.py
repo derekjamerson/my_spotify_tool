@@ -5,7 +5,6 @@ import factory
 from users.models import CustomUser
 
 
-# noinspection PyMethodParameters
 class CustomUserFactory(factory.django.DjangoModelFactory):
     @factory.Sequence
     def username(n):

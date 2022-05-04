@@ -74,7 +74,6 @@ class BaseTestCase(TestCase):
                 track.save()
 
 
-# noinspection PyPep8Naming
 class MockResponse:
     def __init__(self, GET=None):
         if not GET:

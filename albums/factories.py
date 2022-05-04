@@ -6,7 +6,6 @@ from faker import Faker
 from albums.models import Album
 
 
-# noinspection PyMethodParameters
 class AlbumFactory(factory.django.DjangoModelFactory):
     @factory.Sequence
     def name(n):

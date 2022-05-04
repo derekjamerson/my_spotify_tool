@@ -126,3 +126,77 @@ class LibraryStatsTestCase(BaseTestCase):
         actual = self.css_select_get_text(r, 'ul#top-artists')[0]
         expected = 'None'
         self.assertEqual(actual, expected)
+
+
+class CompareStatsTestCase(BaseTestCase):
+    @property
+    def url_base(self):
+        return reverse(
+            'libraries:compare_stats',
+        )
+
+    @property
+    def url_compare(self):
+        return self.url_base + '?user_id=' + self.other_user.pk
+
+    def setUp(self):
+        super().setUp()
+        self.user = CustomUserFactory()
+        self.library = LibraryFactory(user=self.user)
+        self.client.force_login(self.user)
+        self.other_user = CustomUserFactory()
+        self.other_library = LibraryFactory.build(user=self.other_user)
+        self.other_library.save()
+
+    def test_GET_returns_200(self):
+        r = self.client.get(self.url_base)
+        self.assertEqual(r.status_code, 200)
+        r = self.client.get(self.url_compare)
+        self.assertEqual(r.status_code, 200)
+
+    def test_user_name_present(self):
+        r = self.client.get(self.url_compare)
+        actual = self.css_select_get_text(r, 'tr#username th')
+        expected = ['', self.user.username, self.other_user.username]
+        self.assertEqual(actual, expected)
+
+    def test_track_count_present(self):
+        r = self.client.get(self.url_compare)
+        actual = self.css_select_get_text(r, 'tr#track-count td')
+        count_self = str(self.library.tracks.count())
+        count_other = str(self.other_library.tracks.count())
+        difference = str(
+            self.other_library.tracks.count() - self.library.tracks.count()
+        )
+        expected = [count_self, difference, count_other]
+        self.assertEqual(actual, expected)
+
+    def test_artist_count_present(self):
+        r = self.client.get(self.url_compare)
+        actual = self.css_select_get_text(r, 'tr#artist-count td')
+        count_self = str(self.library.artists.count())
+        count_other = str(self.other_library.artists.count())
+        difference = str(
+            self.other_library.artists.count() - self.library.artists.count()
+        )
+        expected = [count_self, difference, count_other]
+        self.assertEqual(actual, expected)
+
+    def test_total_duration_present(self):
+        r = self.client.get(self.url_compare)
+        actual = self.css_select_get_text(r, 'tr#total-duration td')
+
+        def time_string(td_input):
+            hours, remainder = divmod(td_input.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            return (
+                f'{str(hours).zfill(2)}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}'
+            )
+
+        dur_self = time_string(self.library.total_duration)
+        dur_other = time_string(self.other_library.total_duration)
+        difference = time_string(
+            self.library.total_duration - self.other_library.total_duration
+        )
+        expected = [dur_self, difference, dur_other]
+        self.assertEqual(actual, expected)

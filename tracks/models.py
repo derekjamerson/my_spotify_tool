@@ -17,5 +17,4 @@ class Track(models.Model):
 
     @property
     def duration(self):
-        # noinspection PyTypeChecker
         return timedelta(milliseconds=int(self.duration_ms))
