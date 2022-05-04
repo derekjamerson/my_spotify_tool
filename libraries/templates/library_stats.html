@@ -3,15 +3,21 @@
 {% block title %}Library: {{ library.user.username }}{% endblock title %}
 {% block content %}
     <div class="container">
-        <form action="/pull_data/" class="form" method="POST">
-            {% csrf_token %}
-            <div class="text-center" style="padding-bottom:35px">
-                <h1 style="padding-bottom:35px">Library Stats</h1>
+        <h1 class="text-center" style="padding-bottom:35px">Library Stats</h1>
+        <div class="text-center" style="padding-bottom:35px">
+            <form action="/pull_data/" class="form" method="POST" style="display:inline">
+                {% csrf_token %}
                 <button type="submit" class="btn btn-secondary btn-sm text-nowrap">
                     Pull Data
                 </button>
-            </div>
-        </form>
+            </form>
+            <form action="/libraries/compare_stats" class="form" method="GET" style="display:inline">
+                <button type="submit" class="btn btn-secondary btn-sm text-nowrap">
+                    Compare
+                </button>
+            </form>
+        </div>
+
 
         <dl class="row properties">
             <dt class="col-sm-3">User</dt>
@@ -23,7 +29,7 @@
             <dt class="col-sm-3">Last Updated</dt>
             <dd class="col-sm-9" id="last-updated">
             {% if library.tracks.exists %}
-                {{ library.last_updated|date:"F j, Y H:i:s" }}
+                {{ library.last_updated|date:"F d, Y H:i:s" }}
             {% else %}
                 Never
             {% endif %}

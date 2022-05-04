@@ -4,9 +4,7 @@
     <div class="text-center">
         <h1>Welcome</h1>
     </div>
-    {% comment %}
-    TODO broken for some reason. should use url with reverse
-    {% endcomment %}
+    <!-- TODO broken for some reason. should use url with reverse -->
     <form action="/spotify_login/" class="form" method="POST">
         <div class="row justify-content-center" style="padding-top: 65px">
             {% csrf_token %}

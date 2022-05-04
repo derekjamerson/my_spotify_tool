@@ -5,7 +5,6 @@ import factory
 from artists.models import Artist
 
 
-# noinspection PyMethodParameters
 class ArtistFactory(factory.django.DjangoModelFactory):
     @factory.Sequence
     def name(n):

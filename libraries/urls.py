@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -16,11 +16,5 @@ urlpatterns = [
         r'compare_stats/',
         views.compare_stats,
         name='compare_stats',
-        kwargs={'user_id': None},
-    ),
-    path(
-        r'compare_stats/<str:user_id>/',
-        views.compare_stats,
-        name='compare_stats_compare',
     ),
 ]

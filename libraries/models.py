@@ -42,7 +42,6 @@ class Library(models.Model):
         for track in self.tracks.all():
             total_pop += int(track.popularity)
         try:
-            # noinspection PyUnresolvedReferences
             return round(total_pop / self.tracks.count(), 2)
         except ZeroDivisionError:
             return 0

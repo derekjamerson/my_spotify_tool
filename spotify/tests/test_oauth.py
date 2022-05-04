@@ -14,7 +14,6 @@ class OAuthTestCase(BaseTestCase):
     def test_get_token_json(self):
         expected = {'item': 'dummy_data'}
 
-        # noinspection PyUnusedLocal
         def mock_json(*args, **kwargs):
             return expected
 
