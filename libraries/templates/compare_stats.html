@@ -20,32 +20,32 @@
     {% if their_library %}
     <table class="table">
       <thead>
-        <tr>
+        <tr id="username">
           <th scope="col"></th>
-          <th scope="col">{{ my_library.user.username }}</th>
-          <th scope="col">Difference</th>
+          <th scope="col" class="field">{{ my_library.user.username }}</th>
+          <th scope="col" class="field>Difference</th>
           <th scope="col">{{ their_library.user.username }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="track-count">
           <th scope="row">Track Count</th>
           <td>{{ my_library.tracks.count }}</td>
           <td>{% calc_diff their_library.tracks.count my_library.tracks.count %}</td>
           <td>{{ their_library.tracks.count }}</td>
         </tr>
-        <tr>
+        <tr id="artist-count">
           <th scope="row">Artist Count</th>
           <td>{{ my_library.artists.count }}</td>
           <td>{% calc_diff their_library.artists.count my_library.artists.count %}</td>
           <td>{{ their_library.artists.count }}</td>
         </tr>
-        <tr>
+        <!-- TODO fix this. is messy and probably has errors. -->
+        <tr id="total-duration">
           <th scope="row">Total Duration</th>
           <td>{% display_timedelta my_library.total_duration %}</td>
           {% calc_diff my_library.total_duration their_library.total_duration as duration_diff %}
           <td>
-            {% if my_library.total_duration > their_library.total_duration %}-{% endif %}
             {% display_timedelta duration_diff %}
           </td>
           <td>{% display_timedelta their_library.total_duration %}</td>
