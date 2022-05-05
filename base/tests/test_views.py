@@ -25,6 +25,13 @@ class IndexTestCase(BaseTestCase):
         r = self.client.get(self.url)
         self.assertRedirects(r, reverse('libraries:my_library_stats'))
 
+    def test_navbar_brand_url_is_index_page_when_not_logged_in(self):
+        r = self.client.get(self.url)
+        self.assertEqual(r.status_code, 200)
+
+        expected = self.css_select_get_attributes(r, 'a.navbar-brand', ['href'])
+        self.assertEqual(expected, [dict(href=reverse('base:index'))])
+
 
 class SpotifyLoginTestCase(BaseTestCase):
     def setUp(self):
