@@ -157,7 +157,7 @@ class CompareStatsTestCase(BaseTestCase):
     def test_user_name_present(self):
         r = self.client.get(self.url_compare)
         actual = self.css_select_get_text(r, 'tr#username th')
-        expected = ['', self.user.username, self.other_user.username]
+        expected = ['', self.user.username, 'Difference', self.other_user.username]
         self.assertEqual(actual, expected)
 
     def test_track_count_present(self):
