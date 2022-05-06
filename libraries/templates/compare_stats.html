@@ -40,7 +40,9 @@
           <td>{% calc_diff their_library.artists.count my_library.artists.count %}</td>
           <td>{{ their_library.artists.count }}</td>
         </tr>
-        <!-- TODO fix this. is messy and probably has errors. -->
+        {% comment %}
+          TODO fix this. is messy and probably has errors.
+        {% endcomment %}
         <tr id="total-duration">
           <th scope="row">Total Duration</th>
           <td>{% display_timedelta my_library.total_duration %}</td>
