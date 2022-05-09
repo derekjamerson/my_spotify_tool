@@ -1,1 +1,1 @@
-web: gunicorn spotify_project.wsgi
+web: gunicorn spotify_project.wsgi --timeout 60

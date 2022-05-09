@@ -7,6 +7,7 @@ from spotify import Spotify
 from spotify.oauth import OAuth
 
 
+# TODO login required. redirect to this
 def index(request):
     if request.user.is_authenticated:
         return redirect(reverse('libraries:my_library_stats'))
