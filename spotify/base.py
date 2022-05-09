@@ -20,13 +20,13 @@ class Spotify:
         self.album_utils = AlbumUtils()
         self.track_utils = TrackUtils()
         self.library_utils = LibraryUtils()
+        self.session = requests.Session()
 
-    @staticmethod
-    def get_response_json(url, headers, limit='50'):
+    def get_response_json(self, url, headers, limit='50'):
         body = {
             'limit': limit,
         }
-        return requests.get(url, headers=headers, params=urlencode(body)).json()
+        return self.session.get(url, headers=headers, params=urlencode(body)).json()
 
     @property
     def tracks(self):
