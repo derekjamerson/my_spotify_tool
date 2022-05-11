@@ -2,6 +2,7 @@ from django.urls import reverse
 
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
+from users.factories import CustomUserFactory
 
 
 class TrackInfoTestCase(BaseTestCase):
@@ -15,6 +16,8 @@ class TrackInfoTestCase(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.track = TrackFactory()
+        self.user = CustomUserFactory()
+        self.client.force_login(self.user)
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)

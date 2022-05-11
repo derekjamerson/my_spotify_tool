@@ -4,6 +4,7 @@ from albums.factories import AlbumFactory
 from artists.factories import ArtistFactory
 from testing import BaseTestCase
 from tracks.factories import TrackFactory
+from users.factories import CustomUserFactory
 
 
 class AlbumInfoTestCase(BaseTestCase):
@@ -19,6 +20,8 @@ class AlbumInfoTestCase(BaseTestCase):
         self.artists = ArtistFactory.create_batch(3)
         self.album = AlbumFactory(artists=self.artists)
         self.tracks = TrackFactory.create_batch(3, album=self.album)
+        self.user = CustomUserFactory()
+        self.client.force_login(self.user)
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url)
