@@ -12,12 +12,8 @@ def get_source_all_artists(*, user, user_id, mine):
     if user_id:
         user = get_object_or_404(get_user_model(), pk=user_id)
         return user.library.artists.all(), user
-    if user.is_authenticated:
-        if mine:
-            return user.library.artists.all(), user
-        return Artist.objects.all(), None
     if mine:
-        raise Http404()
+        return user.library.artists.all(), user
     return Artist.objects.all(), None
 
 
