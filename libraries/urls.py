@@ -17,4 +17,9 @@ urlpatterns = [
         views.compare_stats,
         name='compare_stats',
     ),
+    path(
+        r'browse_libraries/',
+        views.browse_libraries,
+        name='browse_libraries',
+    ),
 ]
