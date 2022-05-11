@@ -15,14 +15,16 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                {% if user.is_authenticated %}
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="libraryMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Library
                             </a>
                             <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="libraryMenu">
-                                <li><a class="dropdown-item" href="{% url 'libraries:my_library_stats' %}">My Library</a></li>    
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'libraries:my_library_stats' %}">My Library</a></li>
+                            {% endif %}    
+                                <li><a class="dropdown-item" href="{% url 'libraries:my_library_stats' %}">Browse Libraries</a></li>    
                             </ul>
                         </li>
                     </ul>
@@ -31,14 +33,16 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ user.username }}
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                                <a class="dropdown-item" href="{% url 'users:my_info' %}">Profile</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                <li><a class="dropdown-item" href="{% url 'users:my_info' %}">Profile</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'libraries:my_library_stats' %}">My Library</a></li>
+                            {% endif %}  
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% url 'base:logout' %}">Logout</a>
-                            </div>
+                                <li><a class="dropdown-item" href="{% url 'base:logout' %}">Logout</a></li>
+                            </ul>
                         </li>
                     </ul>
-                {% endif %}
                 </div>
             </div>
         </nav>
