@@ -31,18 +31,12 @@ class AllArtistsTestCase(BaseTestCase):
     def test_GET_return_status_code_me(self):
         r = self.client.get(self.url_me)
         self.assertEqual(r.status_code, 200)
-        self.client.logout()
-        r = self.client.get(self.url_me)
-        self.assertEqual(r.status_code, 404)
 
     def test_GET_return_status_code_user(self):
         r = self.client.get(self.get_url_user(self.other_user))
         self.assertEqual(r.status_code, 200)
 
     def test_GET_return_status_code_all(self):
-        r = self.client.get(self.url_all)
-        self.assertEqual(r.status_code, 200)
-        self.client.logout()
         r = self.client.get(self.url_all)
         self.assertEqual(r.status_code, 200)
 

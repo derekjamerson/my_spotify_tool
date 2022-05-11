@@ -21,6 +21,7 @@ class UserInfoTestCase(BaseTestCase):
         self.library = LibraryFactory(user=self.user)
         self.client.force_login(self.user)
         self.other_user = CustomUserFactory()
+        self.client.force_login(self.user)
 
     def test_GET_returns_200(self):
         r = self.client.get(self.url_user)
@@ -28,16 +29,6 @@ class UserInfoTestCase(BaseTestCase):
         r = self.client.get(self.url_me)
         self.assertEqual(r.status_code, 200)
 
-    # def test_properties_present(self):
-    #     r = self.client.get(self.url_me)
-    #     actual_properties = self.css_select_get_text(r, 'dd.property')
-    #     expected_properties = [
-    #         self.user.username,
-    #         self.user.email,
-    #         self.user.spotify_id,
-    #         str(self.user.library.tracks.count()),
-    #     ]
-    #     self.assertEqual(actual_properties, expected_properties)
     def test_username_present(self):
         r = self.client.get(self.url_me)
         actual = self.css_select_get_text(r, 'dl.properties dd#username')[0]
