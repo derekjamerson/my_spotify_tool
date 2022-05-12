@@ -19,10 +19,9 @@ def compare_stats(request):
     form = UserForm(me=request.user)
     context = {
         'my_library': request.user.library,
-        'users': CustomUser.objects.exclude(pk=request.user.pk),
     }
     if request.GET:
-        form = UserForm(request.GET)
+        form = UserForm(request.GET, me=request.user)
         if form.is_valid():
             context['their_library'] = form.cleaned_data['user'].library
     context['form'] = form
