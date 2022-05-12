@@ -7,12 +7,8 @@
     <div class="text-center" style="padding-bottom:35px">
       <h1 style="padding-bottom:35px">Compare Library Stats</h1>
       <div>
-        <form action="/libraries/compare_stats/" class="form" method="get">
-          <select name="user_id">
-            {% for user in users %}
-            <option value="{{ user.pk }}">{{ user.username }}</option>
-            {% endfor %}
-          </select>
+        <form class="form" method="get">
+          {{ form }}
           <input type="submit" value="Go">
         </form>
       </div>
