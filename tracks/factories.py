@@ -29,6 +29,10 @@ class TrackFactory(factory.django.DjangoModelFactory):
     def popularity(n):
         return random.randint(0, 100)
 
+    @factory.Sequence
+    def uri(n):
+        return str(uuid.uuid4())
+
     @factory.post_generation
     def artists(self, create, artists):
         if not create:

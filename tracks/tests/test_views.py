@@ -60,6 +60,12 @@ class TrackInfoTestCase(BaseTestCase):
         expected = str(self.track.popularity)
         self.assertEqual(actual, expected)
 
+    def test_uri_present(self):
+        r = self.client.get(self.url)
+        actual = self.css_select_get_text(r, 'dl.properties dd#uri')[0]
+        expected = str(self.track.uri)
+        self.assertEqual(actual, expected)
+
     def test_artists_present(self):
         r = self.client.get(self.url)
         actual_artist_list = self.css_select_get_text(r, 'ul#artists li.artist a')
