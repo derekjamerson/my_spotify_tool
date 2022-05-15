@@ -27,6 +27,17 @@
                                 <li><a class="dropdown-item" href="{% url 'libraries:browse_libraries' %}">Browse Libraries</a></li>    
                             </ul>
                         </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="playlistMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Playlist
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="playlistMenu">
+                                <li><a class="dropdown-item" href="">Foo</a></li>
+                                <li><a class="dropdown-item" href="">Bar</a></li>    
+                            </ul>
+                        </li>
+                    {% endif %}    
                     </ul>
                     <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
