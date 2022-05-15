@@ -1,5 +1,5 @@
 class Playlist:
-    def __init__(self, *, spotify_id, name, tracks=None, description):
+    def __init__(self, *, spotify_id=None, name, tracks=None, description):
         self.spotify_id = spotify_id
         self.name = name
         self.tracks = tracks
