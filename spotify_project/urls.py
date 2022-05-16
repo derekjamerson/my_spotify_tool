@@ -24,4 +24,5 @@ urlpatterns = [
     re_path(r'^libraries/', include('libraries.urls')),
     re_path(r'^albums/', include('albums.urls')),
     re_path(r'^users/', include('users.urls')),
+    re_path(r'^playlists/', include('playlists.urls')),
 ]

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Create Playlist{% endblock title %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="padding-bottom:35px">Create Playlist</h1>
+        <div class="text-center" style="padding-bottom:35px">
+            <form class="form" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Go">
+            </form>
+        </div>
+    </div>
+{% endblock content %}

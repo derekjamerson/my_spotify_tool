@@ -1,3 +1,5 @@
+import json
+from datetime import datetime
 from urllib.parse import urlencode
 
 import requests
@@ -54,6 +56,12 @@ class Spotify:
         self.library_utils.add_library_to_db(track_dicts, user)
         return
 
+    def send_post(self, url, data):
+        response = self.session.post(
+            url=url, headers=self.headers, data=json.dumps(data)
+        ).json()
+        return response
+
     def create_playlist(self, user, playlist):
         url = f'https://api.spotify.com/v1/users/{user.pk}/playlists'
         data = {
@@ -61,7 +69,8 @@ class Spotify:
             'description': playlist.description,
             'public': 'true',
         }
-        response = self.session.post(url=url, headers=self.headers, data=data).json()
+        # TODO pull out for testing
+        response = self.send_post(url, data)
         playlist.spotify_id = response['id']
         playlist.name = response['name']
         if playlist.tracks:
@@ -71,11 +80,11 @@ class Spotify:
     def add_tracks_to_playlist(self, user, playlist):
         url = f'https://api.spotify.com/v1/playlists/{playlist.spotify_id}/tracks'
         data = {'uris': []}
+        # TODO context manager
         for track in playlist.track_uris:
             data['uris'].append(track)
             if len(data['uris']) == 100:
-                self.session.post(url, headers=self.headers, data=data)
+                self.send_post(url, data=data)
                 data['uris'] = []
         if data['uris']:
-            self.session.post(url, headers=self.headers, data=data)
-        return
+            self.send_post(url=url, data=data)
