@@ -1,3 +1,5 @@
+import json
+from datetime import datetime
 from urllib.parse import urlencode
 
 import requests
@@ -53,3 +55,34 @@ class Spotify:
         self.track_utils.add_track_artist_m2m(track_dicts)
         self.library_utils.add_library_to_db(track_dicts, user)
         return
+
+    def send_post(self, url, data):
+        response = self.session.post(
+            url=url, headers=self.headers, data=json.dumps(data)
+        ).json()
+        return response
+
+    def create_playlist(self, user, playlist):
+        url = f'https://api.spotify.com/v1/users/{user.pk}/playlists'
+        data = {
+            'name': playlist.name,
+            'description': playlist.description,
+            'public': 'true',
+        }
+        response = self.send_post(url, data)
+        playlist.spotify_id = response['id']
+        playlist.name = response['name']
+        if playlist.tracks:
+            self.add_tracks_to_playlist(user, playlist)
+
+    def add_tracks_to_playlist(self, user, playlist):
+        url = f'https://api.spotify.com/v1/playlists/{playlist.spotify_id}/tracks'
+        data = {'uris': []}
+        # TODO context manager
+        for track in playlist.track_uris:
+            data['uris'].append(track)
+            if len(data['uris']) == 100:
+                self.send_post(url, data=data)
+                data['uris'] = []
+        if data['uris']:
+            self.send_post(url=url, data=data)

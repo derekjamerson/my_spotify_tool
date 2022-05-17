@@ -14,6 +14,7 @@ class Track(models.Model):
     duration_ms = models.CharField(max_length=7)
     is_explicit = models.BooleanField(default=False)
     popularity = models.CharField(max_length=3)
+    uri = models.CharField(max_length=100, default="")
 
     @property
     def duration(self):

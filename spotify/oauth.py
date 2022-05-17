@@ -14,6 +14,7 @@ class OAuth:
         'user-read-private',
         'user-read-email',
         'user-library-read',
+        'playlist-modify-public',
     ]
 
     def create_auth_url(self):

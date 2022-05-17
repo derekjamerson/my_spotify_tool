@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'albums',
     'users',
     'libraries',
+    'playlists',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,5 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_URL = "/"
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None

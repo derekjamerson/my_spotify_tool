@@ -32,7 +32,6 @@ def spotify_callback(request):
     return redirect(reverse('base:index'))
 
 
-@require_POST
 def logout_view(request):
     logout(request)
     return redirect(reverse('base:index'))

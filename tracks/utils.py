@@ -17,6 +17,7 @@ class TrackUtils:
                 duration_ms=track['duration_ms'],
                 is_explicit=track['explicit'],
                 popularity=track['popularity'],
+                uri=track['uri'],
             )
 
     @staticmethod

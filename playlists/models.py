@@ -1,0 +1,11 @@
+class Playlist:
+    def __init__(self, *, name, description, spotify_id=None, tracks=None):
+        self.spotify_id = spotify_id
+        self.name = name
+        self.tracks = tracks
+        self.description = description
+
+    @property
+    def track_uris(self):
+        for track in self.tracks:
+            yield track.uri
