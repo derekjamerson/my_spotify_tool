@@ -69,13 +69,11 @@ class Spotify:
             'description': playlist.description,
             'public': 'true',
         }
-        # TODO pull out for testing
         response = self.send_post(url, data)
         playlist.spotify_id = response['id']
         playlist.name = response['name']
         if playlist.tracks:
             self.add_tracks_to_playlist(user, playlist)
-        return
 
     def add_tracks_to_playlist(self, user, playlist):
         url = f'https://api.spotify.com/v1/playlists/{playlist.spotify_id}/tracks'

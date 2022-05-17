@@ -8,16 +8,19 @@ from playlists.utils import PlaylistUtils
 from spotify.base import Spotify
 
 
+# TODO test this
 class MakePlaylistForm(forms.Form):
     name = forms.CharField()
     artists = forms.ModelMultipleChoiceField(Artist.objects.none())
 
-    # TODO get artists by user
     def __init__(self, *args, user, token=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = user
         self.token = token
-        self.fields['artists'].queryset = Artist.objects.all().order_by(Lower('name'))
+        users_tracks = user.library.tracks.all()
+        artists_pks = set(users_tracks.values_list('artists', flat=True))
+        queryset = Artist.objects.filter(pk__in=artists_pks)
+        self.fields['artists'].queryset = queryset.order_by(Lower('name'))
 
     def save(self):
         utils = PlaylistUtils()

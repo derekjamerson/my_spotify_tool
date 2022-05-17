@@ -3,6 +3,7 @@ import random
 from playlists.models import Playlist
 
 
+# TODO hard to test order_by(?)
 class PlaylistUtils:
     def create_random(self, user):
         result_playlist = Playlist(
@@ -16,9 +17,6 @@ class PlaylistUtils:
         description = "Created by Derek's App"
         result_playlist = Playlist(name=name, description=description)
         lib_tracks = list(user.library.tracks.filter(artists__in=artists))
-        tracks = []
-        for track in lib_tracks:
-            tracks.append(track)
-        random.shuffle(tracks)
-        result_playlist.tracks = tracks
+        random.shuffle(lib_tracks)
+        result_playlist.tracks = lib_tracks
         return result_playlist

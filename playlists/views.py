@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from playlists.forms import MakePlaylistForm
 
@@ -15,7 +16,7 @@ def create_playlist(request):
         )
         if form.is_valid():
             form.save()
-            return redirect('base:index')
+            return redirect(reverse('base:index'))
     context = {
         'form': form,
     }
